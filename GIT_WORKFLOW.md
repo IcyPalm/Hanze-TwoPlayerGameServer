@@ -8,6 +8,39 @@ description of how we'll use Git and Github for this project specifically.
 It's quite strict, and in reality we'll be a bit more loose. This just describes
 a "best-case" scenario.
 
+## Forking
+Since you cannot work directly on this repository you need to "clone" it to your own GitHub profile. This process is making a Fork.
+
+To fork this repo click the fork icon on the right hand top of the repository.
+
+![Fork.png](fork.png)
+
+After this you have a copy on your own GitHub profile. Since you cannot work directly on GitHub you need to make a local copy(clone) of your forked repository. To do this copy the link of your forked repository of GitHub and exectute the following:
+
+```bash
+git clone [your copied link]
+```
+
+now you have a local copy of your forked repository.
+
+One important thing needs to be added before you can really start programming and committing. If changes and updates are added to the original repository it will not automatically sync those changes to your fork. For this you need to add an extra link to the original repository to your local clone.
+
+To add the original repository as remote(extra link):
+
+```bash
+git remote add upstream https://github.com/IcyPalm/Hanze-TwoPlayerGameServer.git
+```
+
+Now you can update your local repositories master branch with the master branch of the original repository.
+
+```bash
+git fetch upstream
+git checkout master
+git merge upstream/master
+```
+
+Since we assume you are not working on your master branch nothing should go wrong and a fast-forward should take place. 
+
 ## Making Changes
 
 Before you make _any_ change, branch off `master`. Try _not_ to branch off other
