@@ -1,0 +1,150 @@
+Strategic Game Server - Protocol Documentatie
+---------------------------------------------
+
+
+---------------------------------------------
+Commando's in detail
+
+C = Client
+S = Server
+
+Notes bij server antwoorden:
+Items tussen vierkante haken ('[' en ']') geven een lijst weer.
+Items tussen accolades ('{' en '}') geven een map weer. Zoals bij alle maps, is de volgorde niet bepaald.
+
+Notes bij client commando's:
+Alle commando's zijn niet hoofdlettergevoelig.
+Alle argumenten zijn niet hoofdlettergevoelig, m.u.v. namen van spelers en speltypes.
+
+Niet ondersteunde commando:
+C: <niet ondersteunde commando>
+S: ERR <reden>
+->Geen gevolg.
+
+Inloggen:
+C: login <speler>
+S: OK
+->Nu ingelogd met spelernaam <speler>.
+
+Uitloggen/Verbinding verbreken:
+C: logout | exit | quit | disconnect | bye
+S: -
+->Verbinding is verbroken.
+
+Lijst opvragen met ondersteunde spellen:
+C: get gamelist
+S: OK
+S: SVR GAMELIST ["<speltype>", ...]
+->Lijst met spellen ontvangen.
+
+Lijst opvragen met verbonden spelers:
+C: get playerlist
+S: OK
+S: SVR PLAYERLIST ["<speler>", ...]
+->Lijst met spelers ontvangen.
+
+Inschrijven voor een speltype:
+C: subscribe <speltype>
+S: OK
+->Ingeschreven voor speltype <speltype>.
+
+Match aangeboden krijgen, bericht naar beide spelers:
+S: SVR GAME MATCH {GAMTYPE: "<speltype>", PLAYERTOMOVE: "<naam speler1>", OPPONENT: "<naam tegenstander>"}
+->Nu bezig met een match, de inschrijving voor een speltype is vervallen.
+
+De beurt toegewezen krijgen tijdens match:
+S: SVR GAME YOURTURN {TURNMESSAGE: "<bericht voor deze beurt>"}
+->Nu mogelijkheid een zet te doen.
+
+Een zet doen na het toegewezen krijgen van een beurt:
+C: move <zet>
+S: OK
+->De zet is geaccepteerd door de server, gevolg voor spel zal volgen
+
+Resultaat van een zet ontvangen, bericht naar beide spelers:
+S: SVR GAME MOVE {PLAYER: "<speler>", DETAILS: "<reactie spel op zet>", MOVE: "<zet>"}
+->Er is een zet gedaan, dit bericht geeft aan wie deze gezet heeft, wat de reactie van het spel erop is
+
+Resultaat van een match ontvangen, bericht naar beide spelers:
+S: SVR GAME <speler resultaat> {PLAYERONESCORE: "<score speler1>", PLAYERTWOSCORE: "<score speler2>", COMMENT: "<commentaar op resultaat>"}
+->De match is afgelopen, <speler resultaat> kan de waarde 'WIN', 'LOSS' of 'DRAW' bevatten.
+
+Een match opgeven:
+C: forfeit
+S: OK
+->De speler heeft het spel opgegeven, de server zal het resultaat van de match doorgeven.
+
+Resultaat van een match die opgegeven is door een speler, bericht naar beide spelers:
+S: SVR GAME <speler resultaat> {PLAYERONESCORE: "<score speler1>", PLAYERTWOSCORE: "<score speler2>", COMMENT: "Player forfeited match"}
+->De match is afgelopen, <speler> heeft de match opgegeven.
+
+Resultaat van een match, speler heeft de verbinding verbroken:
+S: SVR GAME <speler resultaat> {PLAYERONESCORE: "<score speler1>", PLAYERTWOSCORE: "<score speler2>", COMMENT: "Client disconnected"}
+->De match is afgelopen, <speler> heeft de verbinding verbroken.
+
+Een speler uitdagen voor een spel:
+C: challenge "<speler>" "<speltype>"
+S: OK
+->De speler is nu uitgedaagd voor een spel. Eerder gemaakte uitdagingen zijn komen te vervallen.
+
+Een uitdaging ontvangen:
+S: SVR GAME CHALLENGE {CHALLENGER: "Sjors", GAMETYPE: "Guess Game", CHALLENGENUMBER: "1"}
+->Nu mogelijkheid de uitdaging te accepteren.
+
+Resultaat van een uitdaging die is komen te vervallen:
+S: SVR GAME CHALLENGE CANCELLED {CHALLENGENUMBER: "<uitdaging nummer>"}
+->De uitdaging is vervallen. Mogelijke oorzaken: speler heeft een andere uitdaging gestart, speler is een match begonnen, speler heeft de verbinding verbroken.
+
+Een uitdaging accepteren:
+C: challenge accept <uitdaging nummer>
+S: OK
+->De uitdaging is geaccepteerd. De match wordt gestart, bericht volgt.
+
+Help opvragen:
+C: help
+S: OK
+->De client heeft nu help informatie opgevraagd, de server zal antwoorden met help informatie.
+
+Help opvragen van een commando:
+C: help <commando>
+S: OK
+->De client heeft nu help informatie opgevraagd voor een commando, de server zal antwoorden met help informatie.
+
+Help informatie ontvangen:
+S: SVR HELP <help informatie>
+->Help informatie is ontvangen, kan meerdere achtereenvolgende responses bevatten.
+
+
+---------------------------------------------
+Overzicht van server-berichten:
+
+OK			Commando geaccepteerd
+ERR			Commando afgewezen
+SVR [HELP | GAME [MATCH | YOURTURN | MOVE | CHALLENGE | [WIN | LOSS | DRAW]]]
+			Bericht van server
+	HELP		Bericht met help informatie
+	GAME		Bericht met betrekking op een spel/match
+	MATCH		Toewijzing van een match
+	YOURTURN	Toewijzing van de beurt tijdens de match
+	MOVE		Een zet gedaan tijdens de match
+	CHALLENGE	Bericht met betrekking op een uitdaging
+	WIN			Ontvanger heeft spel gewonnen
+	LOSS		Ontvanger heeft spel verloren
+	DRAW		Match is geeindigd in gelijk spel
+
+---------------------------------------------
+Overzicht van client-commando's:
+
+login				Aanmelden als speler
+logout | exit | quit | disconnect | bye
+					Uitloggen en verbinding verbreken
+get <gamelist | playerlist>
+					Opvragen van gegevens
+	gamelist		Opvragen van de lijst met ondersteunde speltypes
+	playerlist		Opvragen van de lijst met aangemelde spelers
+subscribe			Inschrijven voor een speltype
+move				Een zet doen tijdens een match
+challenge [accept]	Uitdagingen behandelen
+	accept			Uitdaging accepteren
+forfeit				De huidige match opgeven
+help [commando]		Help weergeven
