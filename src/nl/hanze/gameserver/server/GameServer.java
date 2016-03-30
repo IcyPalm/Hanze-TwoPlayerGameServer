@@ -21,6 +21,7 @@ import nl.hanze.gameserver.server.command.LogoutCommandHandler;
 import nl.hanze.gameserver.server.command.MoveCommandHandler;
 import nl.hanze.gameserver.server.command.SubscribeCommandHandler;
 import nl.hanze.gameserver.server.command.UnsupportedCommandHandler;
+import nl.hanze.gameserver.server.command.UnsubscribeCommandHandler;
 import nl.hanze.gameserver.util.Log;
 import nl.hanze.gameserver.util.ReadWriteBuffer;
 
@@ -49,6 +50,7 @@ public class GameServer implements Runnable {
 		commandHandlerResolver.addHandler(new LogoutCommandHandler());
 		commandHandlerResolver.addHandler(new GetCommandHandler());
 		commandHandlerResolver.addHandler(new SubscribeCommandHandler());
+		commandHandlerResolver.addHandler(new UnsubscribeCommandHandler());
 		commandHandlerResolver.addHandler(new MoveCommandHandler());
 		commandHandlerResolver.addHandler(new ForfeitCommandHandler());
 		commandHandlerResolver.addHandler(new ChallengeCommandHandler());
@@ -146,7 +148,7 @@ public class GameServer implements Runnable {
 		channel.register(selector, SelectionKey.OP_READ, client);
 		
 		client.writeLine(String.format("%s [Version %s]", Application.getInstance().getName(), Application.getInstance().getVersion()));
-		client.writeLine("(C) Copyright 2009 Hanze Hogeschool Groningen");
+		client.writeLine("(C) Copyright 2009-2016 Hanzehogeschool Groningen");
 	}
 	
 	private void handleRead(SelectionKey key) throws IOException {
