@@ -114,6 +114,15 @@ public class ClientManager {
 		
 		return result;
 	}
+
+	/**
+	 * Unsubscribes the client from any game
+	 * @param client
+	 */
+	public void unsubscribe(Client client) {
+		client.setSubscribedGameType(null);
+		notifyListeners(client, ACTION_SUBSCRIBE);
+	}
 	
 	public void challenge(Client player, Client opponent, String gameType) {
 		// Cancel previous challenge, max 1 challenge
@@ -271,13 +280,13 @@ public class ClientManager {
 	
 	public Tournament organiseTournament(String gameType) {
 		ArrayList<Client> playerList = new ArrayList<Client>();
-		
+
 		for(Client c : clientList) {
 			if(c.isLoggedIn()) {
 				playerList.add(c);
 			}
 		}
-		
+
 		tournament = new Tournament(this, gameType, playerList);
 		
 		return tournament;
