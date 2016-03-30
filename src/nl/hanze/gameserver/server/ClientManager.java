@@ -118,17 +118,10 @@ public class ClientManager {
 	/**
 	 * Unsubscribes the client from any game
 	 * @param client
-	 * @return
      */
-	public boolean unsubscribe(Client client) {
-		boolean result = false;
-
+	public void unsubscribe(Client client) {
 		client.setSubscribedGameType(null);
-		result = true;
-
 		notifyListeners(client, ACTION_SUBSCRIBE);
-
-		return result;
 	}
 	
 	public void challenge(Client player, Client opponent, String gameType) {
