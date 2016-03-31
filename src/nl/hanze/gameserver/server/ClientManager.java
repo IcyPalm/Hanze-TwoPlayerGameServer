@@ -118,7 +118,7 @@ public class ClientManager {
 	/**
 	 * Unsubscribes the client from any game
 	 * @param client
-     */
+	 */
 	public void unsubscribe(Client client) {
 		client.setSubscribedGameType(null);
 		notifyListeners(client, ACTION_SUBSCRIBE);
