@@ -1,25 +1,25 @@
 package nl.hanze.gameserver.server.command;
 
-import java.util.ArrayList;
-
 import nl.hanze.gameserver.app.Application;
 import nl.hanze.gameserver.server.Client;
 import nl.hanze.gameserver.server.message.Command;
 import nl.hanze.gameserver.server.message.ErrorResponse;
 import nl.hanze.gameserver.server.message.Response;
 
+import java.util.ArrayList;
+
 public class LoginCommandHandler extends AbstractCommandHandler {
 
 	public LoginCommandHandler() {
 		super("login");
 	}
-	
+
 	@Override
 	public void handleCommand(Client client, Command command) {
 		String argument = command.getArgument();
-		
+
 		Response response = null;
-		
+
 		if(argument.equals("")) {
 			response = new ErrorResponse("No name entered");
 		} else if(Application.getInstance().getGameServer().getClientManager().getTournament() != null) {
@@ -35,24 +35,24 @@ public class LoginCommandHandler extends AbstractCommandHandler {
 				}
 			}
 		}
-		
+
 		client.writeResponse(response);
 	}
 
 	@Override
-	public String getDesciption() {
+	public String getDescription() {
 		return "Login as player";
 	}
 
 	@Override
 	public ArrayList<String> getUsage() {
 		ArrayList<String> responseList = new ArrayList<String>();
-		
+
 		responseList.add("usage: login <player name>");
 		responseList.add("");
 		responseList.add("Valid options and arguments:");
 		responseList.add("  <player name>    : Name to login with");
-		
+
 		return responseList;
 	}
 
