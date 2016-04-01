@@ -15,47 +15,47 @@ import nl.hanze.gameserver.server.message.Response;
  */
 public class UnsubscribeCommandHandler extends AbstractCommandHandler {
 
-    /**
-     * This constructor calls the parent class
-     */
-    public UnsubscribeCommandHandler() {
-        super("unsubscribe");
-    }
+	/**
+	 * This constructor calls the parent class
+	 */
+	public UnsubscribeCommandHandler() {
+		super("unsubscribe");
+	}
 
-    /**
-     * Checks whether the user is logged in and removes
-     * the subscription
-     * @param client
-     * @param command
-     */
-    @Override
-    public void handleCommand(Client client, Command command) {
-        if(!client.isLoggedIn()) {
-            client.writeResponse(new ErrorResponse("Not logged in"));
-            return;
-        }
-        client.getClientManager().unsubscribe(client);
-        client.writeResponse(Response.OK);
-    }
+	/**
+	 * Checks whether the user is logged in and removes
+	 * the subscription
+	 * @param client
+	 * @param command
+	 */
+	@Override
+	public void handleCommand(Client client, Command command) {
+		if(!client.isLoggedIn()) {
+			client.writeResponse(new ErrorResponse("Not logged in"));
+			return;
+		}
+		client.getClientManager().unsubscribe(client);
+		client.writeResponse(Response.OK);
+	}
 
-    /**
-     * returns a String with the description of this command.
-     * @return
-     */
-    @Override
-    public String getDesciption() {
-        return "Unsubscribe from any game";
-    }
+	/**
+	 * returns a String with the description of this command.
+	 * @return
+	 */
+	@Override
+	public String getDesciption() {
+		return "Unsubscribe from any game";
+	}
 
-    /**
-     * Returns an ArrayList with the usage of this
-     * command.
-     * @return
-     */
-    @Override
-    public ArrayList<String> getUsage() {
-        ArrayList<String> responseList = new ArrayList<>();
-        responseList.add("usage: unsubscribe");
-        return responseList;
-    }
+	/**
+	 * Returns an ArrayList with the usage of this
+	 * command.
+	 * @return
+	 */
+	@Override
+	public ArrayList<String> getUsage() {
+		ArrayList<String> responseList = new ArrayList<>();
+		responseList.add("usage: unsubscribe");
+		return responseList;
+	}
 }
