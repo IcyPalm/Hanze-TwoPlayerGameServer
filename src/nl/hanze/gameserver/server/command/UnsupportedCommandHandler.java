@@ -1,10 +1,10 @@
 package nl.hanze.gameserver.server.command;
 
-import java.util.ArrayList;
-
 import nl.hanze.gameserver.server.Client;
 import nl.hanze.gameserver.server.message.Command;
 import nl.hanze.gameserver.server.message.Response;
+
+import java.util.ArrayList;
 
 public class UnsupportedCommandHandler implements ICommandHandler {
 
@@ -12,7 +12,7 @@ public class UnsupportedCommandHandler implements ICommandHandler {
 	public boolean isSupported(Client client, Command command) {
 		return true;
 	}
-	
+
 	@Override
 	public void handleCommand(Client client, Command command) {
 		Response response = new Response(Response.Status.ERR, String.format("Unsupported command: '%s'", command.getAction()));
@@ -20,7 +20,7 @@ public class UnsupportedCommandHandler implements ICommandHandler {
 	}
 
 	@Override
-	public String getDesciption() {
+	public String getDescription() {
 		return null;
 	}
 
