@@ -43,7 +43,7 @@ public class UnsubscribeCommandHandler extends AbstractCommandHandler {
 	 * @return
 	 */
 	@Override
-	public String getDesciption() {
+	public String getDescription() {
 		return "Unsubscribe from any game";
 	}
 
