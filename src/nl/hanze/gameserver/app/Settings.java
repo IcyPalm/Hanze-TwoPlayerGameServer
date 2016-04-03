@@ -19,7 +19,7 @@ public class Settings {
 	
 	private int listenerPort;
 	private String gameModulePath;
-	private int turnTimeLimit;
+	private static int turnTimeLimit;
 	private int tournamentTurnDelay;
 	private int tournamentDisconnectAction;
 	
@@ -64,11 +64,11 @@ public class Settings {
 		this.gameModulePath = gameModulePath;
 	}
 	
-	public int getTurnTimeLimit() {
+	public static int getTurnTimeLimit() {
 		return turnTimeLimit;
 	}
 	
-	public void setTurnTimeLimit(int timeLimit) {
+	public static void setTurnTimeLimit(int timeLimit) {
 		turnTimeLimit = timeLimit;
 	}
 	

@@ -7,6 +7,7 @@ import java.util.HashMap;
 import javax.swing.Timer;
 
 import nl.hanze.gameserver.app.Application;
+import nl.hanze.gameserver.app.Settings;
 import nl.hanze.gameserver.server.message.GameResponse;
 import nl.hanze.gameserver.server.message.Response;
 import nl.hanze.gameserver.util.KeyValuePair;
@@ -33,7 +34,7 @@ public class Match implements ActionListener {
 	private Timer timer;
 	private Client timerClient;
 	
-	public Match(String gameType, Client playerOne, Client playerTwo) {
+	public Match(String gameType, Client playerOne, Client playerTwo, Integer turntime) {
 		gameModule = Application.getInstance().getGameLoader().loadGameModule(gameType, playerOne.getPlayerName(), playerTwo.getPlayerName());
 		matchNumber = matchNumberCount++;
 		this.gameType = gameType;
@@ -50,8 +51,13 @@ public class Match implements ActionListener {
 		
 		playerOne.setSubscribedGameType(null);
 		playerTwo.setSubscribedGameType(null);
+
+		// FIXME: The only time a turn time isn't set is when finding a match
+		if(turntime == null) {
+			turntime = Settings.getTurnTimeLimit();
+		}
 		
-		timer = new Timer(Application.getInstance().getSettings().getTurnTimeLimit() * 1000, this);
+		timer = new Timer(turntime * 1000, this);
 		
 		// Cancel any player-initiated challenges
 		playerOne.getClientManager().cancelChallenge(playerOne.getChallenge());

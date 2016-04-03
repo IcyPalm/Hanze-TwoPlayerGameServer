@@ -19,6 +19,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import nl.hanze.gameserver.app.Application;
+import nl.hanze.gameserver.app.Settings;
 import nl.hanze.gameserver.server.Client;
 import nl.hanze.gameserver.server.Tournament;
 import nl.hanze.gameserver.util.KeyValuePair;
@@ -111,7 +112,8 @@ public class TournamentView extends JFrame implements ActionListener {
 			gameTypeBox.setEnabled(false);
 			
 			String gameType = (String) gameTypeBox.getSelectedItem();
-			tournament = Application.getInstance().getGameServer().getClientManager().organiseTournament(gameType);
+			tournament = Application.getInstance().getGameServer().getClientManager().organiseTournament(gameType,
+					Settings.getTurnTimeLimit());
 			scorePanel.setTournament(tournament);
 			tournament.addActionListener(this);
 			Application.getInstance().getGameServer().getClientManager().startTournament();
