@@ -19,7 +19,7 @@ public class Settings {
 
 	private int listenerPort;
 	private String gameModulePath;
-	private int turnTimeLimit;
+	private static int turnTimeLimit;
 	private int tournamentTurnDelay;
 	private int tournamentDisconnectAction;
 
@@ -63,12 +63,21 @@ public class Settings {
 	public void setGameModulePath(String gameModulePath) {
 		this.gameModulePath = gameModulePath;
 	}
+<<<<<<< HEAD
 
 	public int getTurnTimeLimit() {
 		return turnTimeLimit;
 	}
 
 	public void setTurnTimeLimit(int timeLimit) {
+=======
+	
+	public static int getTurnTimeLimit() {
+		return turnTimeLimit;
+	}
+	
+	public static void setTurnTimeLimit(int timeLimit) {
+>>>>>>> INIT: Test state for setting turn time when asking for challenging -> Works ATM
 		turnTimeLimit = timeLimit;
 	}
 

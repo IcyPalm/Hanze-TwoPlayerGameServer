@@ -18,6 +18,24 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.LinkedBlockingQueue;
 
+<<<<<<< HEAD
+=======
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+
+import nl.hanze.gameserver.app.Application;
+import nl.hanze.gameserver.app.Settings;
+import nl.hanze.gameserver.server.Client;
+import nl.hanze.gameserver.server.Tournament;
+import nl.hanze.gameserver.util.KeyValuePair;
+import nl.hanze.gameserver.util.Log;
+import nl.hanze.t23i.gamemodule.extern.AbstractGameModule;
+
+>>>>>>> INIT: Test state for setting turn time when asking for challenging -> Works ATM
 public class TournamentView extends JFrame implements ActionListener {
 
 	private static final long serialVersionUID = 0L;
@@ -105,7 +123,11 @@ public class TournamentView extends JFrame implements ActionListener {
 
 			String gameType = (String) gameTypeBox.getSelectedItem();
 			tournament = Application.getInstance().getGameServer().getClientManager().organiseTournament(gameType,
+<<<<<<< HEAD
 					Application.getInstance().getSettings().getTurnTimeLimit());
+=======
+					Settings.getTurnTimeLimit());
+>>>>>>> INIT: Test state for setting turn time when asking for challenging -> Works ATM
 			scorePanel.setTournament(tournament);
 			tournament.addActionListener(this);
 			Application.getInstance().getGameServer().getClientManager().startTournament();

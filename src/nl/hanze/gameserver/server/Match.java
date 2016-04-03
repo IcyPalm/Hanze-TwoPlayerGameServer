@@ -1,6 +1,7 @@
 package nl.hanze.gameserver.server;
 
 import nl.hanze.gameserver.app.Application;
+import nl.hanze.gameserver.app.Settings;
 import nl.hanze.gameserver.server.message.GameResponse;
 import nl.hanze.gameserver.server.message.Response;
 import nl.hanze.gameserver.util.KeyValuePair;
