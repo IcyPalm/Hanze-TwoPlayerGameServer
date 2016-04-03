@@ -11,64 +11,53 @@ import java.util.ArrayList;
 
 public class GetCommandHandler extends AbstractCommandHandler {
 
-	public GetCommandHandler() {
-		super("get");
-	}
+    public GetCommandHandler() {
+        super("get");
+    }
 
-	@Override
-	public void handleCommand(Client client, Command command) {
+    @Override
+    public void handleCommand(Client client, Command command) {
+        if (command.getArgument().equalsIgnoreCase("gamelist")) {
+            client.writeResponse(Response.OK);
+            client.writeResponse(new Response(Response.Status.SVR, String.format("GAMELIST %s", getGameListString())));
+        } else if (command.getArgument().equalsIgnoreCase("playerlist")) {
+            client.writeResponse(Response.OK);
+            client.writeResponse(new Response(Response.Status.SVR, String.format("PLAYERLIST %s", getPlayerListString())));
+        } else {
+            client.writeResponse(new ErrorResponse(String.format("Unknown GET argument: '%s'", command.getArgument())));
+        }
+    }
 
-		/*
-		Reason why this lowercase method is here and not in the command, it that some commands may be
-		case-sensitive.
-		*/
+    public String getPlayerListString() {
+        ArrayList<Client> playerList = Application.getInstance().getGameServer().getClientManager().getPlayerList();
+        ArrayList<String> playerNameList = new ArrayList<String>(playerList.size());
+        for (Client client : playerList) {
+            playerNameList.add(client.getPlayerName());
+        }
 
-		String commandArgument = command.getArgument();
-		if(commandArgument != null) {
-			commandArgument = commandArgument.toLowerCase();
-		}
+        return StringUtils.toString(playerNameList);
+    }
 
-		if(commandArgument.equalsIgnoreCase("gamelist")) {
-			client.writeResponse(Response.OK);
-			client.writeResponse(new Response(Response.Status.SVR, String.format("GAMELIST %s", getGameListString())));
-		} else if(commandArgument.equals("playerlist")) {
-			client.writeResponse(Response.OK);
-			client.writeResponse(new Response(Response.Status.SVR, String.format("PLAYERLIST %s", getPlayerListString())));
-		} else {
-			client.writeResponse(new ErrorResponse(String.format("Unknown GET argument: '%s'", command.getArgument())));
-		}
-	}
+    private String getGameListString() {
+        return StringUtils.toString(Application.getInstance().getGameLoader().getGameTypeList());
+    }
 
-	public String getPlayerListString() {
-		ArrayList<Client> playerList = Application.getInstance().getGameServer().getClientManager().getPlayerList();
-		ArrayList<String> playerNameList = new ArrayList<String>(playerList.size());
-		for(Client client : playerList) {
-			playerNameList.add(client.getPlayerName());
-		}
+    @Override
+    public String getDescription() {
+        return "Get server data";
+    }
 
-		return StringUtils.toString(playerNameList);
-	}
+    @Override
+    public ArrayList<String> getUsage() {
+        ArrayList<String> responseList = new ArrayList<String>();
 
-	private String getGameListString() {
-		return StringUtils.toString(Application.getInstance().getGameLoader().getGameTypeList());
-	}
+        responseList.add("usage: get <gamelist | playerlist>");
+        responseList.add("");
+        responseList.add("Valid options and arguments:");
+        responseList.add("  <gamelist>      : Available games");
+        responseList.add("  <playerlist>    : Currently logged in players");
 
-	@Override
-	public String getDescription() {
-		return "Get server data";
-	}
-
-	@Override
-	public ArrayList<String> getUsage() {
-		ArrayList<String> responseList = new ArrayList<String>();
-
-		responseList.add("usage: get <gamelist | playerlist>");
-		responseList.add("");
-		responseList.add("Valid options and arguments:");
-		responseList.add("  <gamelist>      : Available games");
-		responseList.add("  <playerlist>    : Currently logged in players");
-
-		return responseList;
-	}
+        return responseList;
+    }
 
 }
