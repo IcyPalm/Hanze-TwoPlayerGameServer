@@ -21,7 +21,10 @@ public class Command {
 	}
 	
 	public String getArgument() {
-		return argument;
+		if(argument != null) {
+			return argument.toLowerCase();
+		}
+		return null;
 	}
 	
 	@Override

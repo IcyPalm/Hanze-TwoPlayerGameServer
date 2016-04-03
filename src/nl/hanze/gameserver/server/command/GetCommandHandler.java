@@ -17,10 +17,21 @@ public class GetCommandHandler extends AbstractCommandHandler {
 
 	@Override
 	public void handleCommand(Client client, Command command) {
-		if(command.getArgument().equalsIgnoreCase("gamelist")) {
+
+		/*
+		Reason why this lowercase method is here and not in the command, it that some commands may be
+		case-sensitive.
+		*/
+
+		String commandArgument = command.getArgument();
+		if(commandArgument != null) {
+			commandArgument = commandArgument.toLowerCase();
+		}
+
+		if(commandArgument.equalsIgnoreCase("gamelist")) {
 			client.writeResponse(Response.OK);
 			client.writeResponse(new Response(Response.Status.SVR, String.format("GAMELIST %s", getGameListString())));
-		} else if(command.getArgument().equals("playerlist")) {
+		} else if(commandArgument.equals("playerlist")) {
 			client.writeResponse(Response.OK);
 			client.writeResponse(new Response(Response.Status.SVR, String.format("PLAYERLIST %s", getPlayerListString())));
 		} else {
