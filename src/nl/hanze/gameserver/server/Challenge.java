@@ -8,12 +8,14 @@ public class Challenge {
 	private Client player;
 	private Client opponent;
 	private String gameType;
+	private int turnTime;
 	
-	public Challenge(Client player, Client opponent, String gameType) {
+	public Challenge(Client player, Client opponent, String gameType, int turnTime) {
 		challengeNumber = challengeNumberCount++;
 		this.player = player;
 		this.opponent = opponent;
 		this.gameType = gameType;
+		this.turnTime = turnTime;
 	}
 
 	public int getChallengeNumber() {
@@ -31,6 +33,8 @@ public class Challenge {
 	public String getGameType() {
 		return gameType;
 	}
+
+	public int getTurnTime() { return turnTime; }
 	
 	@Override
 	public boolean equals(Object obj) {
