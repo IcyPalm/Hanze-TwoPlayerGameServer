@@ -7,11 +7,13 @@
 ```
 OK          Command accepted
 ERR         Command denied
-SVR [HELP | GAME [MATCH | YOURTURN | MOVE | CHALLENGE | [WIN | LOSS | DRAW]]]
+SVR [HELP | GAME [MATCH {GAMETYPE, PLAYERTOMOVE, OPPONENT} | YOURTURN | MOVE | CHALLENGE | [WIN | LOSS | DRAW]] | GAMELIST | PLAYERLIST]
             Message from server
     HELP            Message with help information
     GAME            Message concerning the game
-        MATCH           Assigning a match
+    	GAMELIST 	Returns a list of games as ["<gametype>",..]
+    	PLAYERLIST 	Returns a list of players as ["<player>",..]
+        MATCH           Assigning a match with {GAMETYPE, PLAYERTOMOVE, OPPONENT}
         YOURTURN        Notification of turns during the match
         MOVE            Moving during the match
         CHALLENGE       Message about a challange
@@ -83,13 +85,13 @@ S: OK
 ->Subscired for <gametype>.  
 
 **Unsubscribe:**  
-C: unsubscribe
+C: unsubscribe  
 S: OK  
 ->Unsubscribed from the previously subscribed game.  
 
 **Match offered, message to both playerss:**  
 S: SVR GAME MATCH {GAMETYPE: "<gametype>", PLAYERTOMOVE: "<name player1>", OPPONENT: "<name opponent>"}  
-->Now playing the match, subsciption for a gametype has expired.
+->Now playing the match, subsciption for a gametype has expired.  
 
 **Getting the turn in a match:**  
 S: SVR GAME YOURTURN {TURNMESSAGE: "<message for this turn>"}  
@@ -98,7 +100,7 @@ S: SVR GAME YOURTURN {TURNMESSAGE: "<message for this turn>"}
 **Making a move after you get the possibility to do a turn:**  
 C: move <move>  
 S: OK  
-->The move is accepted by the server, result for the game will follow.
+->The move is accepted by the server, result for the game will follow.  
 
 **Result from move received, message to both players:**  
 S: SVR GAME MOVE {PLAYER: "<player>", DETAILS: "<reaction on move>", MOVE: "<move>"}  
