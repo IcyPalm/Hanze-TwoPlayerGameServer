@@ -8,7 +8,7 @@ import nl.hanze.gameserver.util.StringUtils;
 import nl.hanze.t23i.gamemodule.extern.AbstractGameModule;
 import nl.hanze.t23i.gamemodule.extern.IGameModule;
 
-import javax.swing.*;
+import javax.swing.Timer;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.HashMap;

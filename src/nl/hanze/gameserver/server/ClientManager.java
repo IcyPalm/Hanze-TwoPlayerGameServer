@@ -138,7 +138,6 @@ public class ClientManager {
 		opponent.writeResponse(new GameResponse(String.format("CHALLENGE %s", challengeDetails)));
 	}
 
-	// TODO:
 	public void acceptChallenge(Challenge challenge) {
 		cancelChallenge(challenge, false);
 		

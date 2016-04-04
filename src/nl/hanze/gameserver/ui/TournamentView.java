@@ -8,7 +8,8 @@ import nl.hanze.gameserver.util.Log;
 import nl.hanze.t23i.gamemodule.extern.AbstractGameModule;
 
 import javax.swing.*;
-import java.awt.*;
+import java.awt.FlowLayout;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
