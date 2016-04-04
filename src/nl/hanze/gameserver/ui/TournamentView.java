@@ -19,6 +19,7 @@ import java.util.Map;
 import java.util.concurrent.LinkedBlockingQueue;
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -36,6 +37,8 @@ import nl.hanze.gameserver.util.Log;
 import nl.hanze.t23i.gamemodule.extern.AbstractGameModule;
 
 >>>>>>> INIT: Test state for setting turn time when asking for challenging -> Works ATM
+=======
+>>>>>>> * Fixed static way of getting settinsinfo
 public class TournamentView extends JFrame implements ActionListener {
 
 	private static final long serialVersionUID = 0L;
@@ -124,10 +127,14 @@ public class TournamentView extends JFrame implements ActionListener {
 			String gameType = (String) gameTypeBox.getSelectedItem();
 			tournament = Application.getInstance().getGameServer().getClientManager().organiseTournament(gameType,
 <<<<<<< HEAD
+<<<<<<< HEAD
 					Application.getInstance().getSettings().getTurnTimeLimit());
 =======
 					Settings.getTurnTimeLimit());
 >>>>>>> INIT: Test state for setting turn time when asking for challenging -> Works ATM
+=======
+					Application.getInstance().getSettings().getTurnTimeLimit());
+>>>>>>> * Fixed static way of getting settinsinfo
 			scorePanel.setTournament(tournament);
 			tournament.addActionListener(this);
 			Application.getInstance().getGameServer().getClientManager().startTournament();
