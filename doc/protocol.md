@@ -16,7 +16,7 @@ SVR [HELP | GAME [MATCH {GAMETYPE, PLAYERTOMOVE, OPPONENT} | YOURTURN | MOVE | C
         MATCH           Assigning a match with {GAMETYPE, PLAYERTOMOVE, OPPONENT}
         YOURTURN        Notification of turns during the match
         MOVE            Moving during the match
-        CHALLENGE       Message about a challange
+        CHALLENGE       Message about a challenge
             WIN             Receiver won the game
             LOSS            Receiver lost the game
             DRAW            Match ended in a draw
@@ -35,7 +35,7 @@ get <gamelist | playerlist>
             move                Do a move in a match
             challenge [accept | forfeit]  
                                 Processing a challange
-	            accept              Accepting a challange
+	            accept              Accepting a challenge
                 forfeit				Forfeit on the current match
             help [command]     Display help
 ```
@@ -91,7 +91,7 @@ S: OK
 
 **Match offered, message to both playerss:**  
 S: SVR GAME MATCH {GAMETYPE: "<gametype>", PLAYERTOMOVE: "<name player1>", OPPONENT: "<name opponent>"}  
-->Now playing the match, subsciption for a gametype has expired.  
+->Now playing the match, subscription for a gametype has expired.  
 
 **Getting the turn in a match:**  
 S: SVR GAME YOURTURN {TURNMESSAGE: "<message for this turn>"}  
@@ -123,23 +123,23 @@ S: SVR GAME <player result> {PLAYERONESCORE: "<score player1>", PLAYERTWOSCORE: 
 S: SVR GAME <speler result> {PLAYERONESCORE: "<score player1>", PLAYERTWOSCORE: "<score player2>", COMMENT: "Client disconnected"}  
 ->The match has ended, <player> disconnected.  
 
-**Challanging a player for a game:**  
+**Challenging a player for a game:**  
 C: challenge "<player>" "<gametype>"  
 S: OK  
-->The player is now challanged for a game. Previous challanges will be cancelled.  
+->The player is now challenged for a game. Previous challenges will be cancelled.  
 
-**Receiving a challange:**  
+**Receiving a challenge:**  
 S: SVR GAME CHALLENGE {CHALLENGER: <player>, GAMETYPE: <gametype>, CHALLENGENUMBER: <challangenumber>}  
-->Now the possibility to accept the challange.  
+->Now the possibility to accept the challenge.  
 
 **Result of a challange that has expired:**  
 S: SVR GAME CHALLENGE CANCELLED {CHALLENGENUMBER: "<challange number>"}  
 ->Challange has expired. Possible causes: player started another challange, player started a match or the player disconnected from the game.  
 
-**Accepting a challange:**  
-C: challenge accept <challange number>  
+**Accepting a challenge:**  
+C: challenge accept <challenge number>  
 S: OK  
-->The challange has been excepted. The match will be started, message will follow.  
+->The challange has been accepted. The match will be started, message will follow.  
 
 **Ask for help:**  
 C: help  
