@@ -16,7 +16,7 @@ SVR [HELP | GAME [MATCH {GAMETYPE, PLAYERTOMOVE, OPPONENT} | YOURTURN | MOVE | C
         MATCH           Assigning a match with {GAMETYPE, PLAYERTOMOVE, OPPONENT}
         YOURTURN        Notification of turns during the match
         MOVE            Moving during the match
-        CHALLENGE       Message about a challange
+        CHALLENGE       Message about a challenge
             WIN             Receiver won the game
             LOSS            Receiver lost the game
             DRAW            Match ended in a draw
@@ -34,8 +34,8 @@ get <gamelist | playerlist>
             unsubscribe         Unsubscribe for a gametype
             move                Do a move in a match
             challenge [accept | forfeit]  
-                                Processing a challange
-	            accept              Accepting a challange
+                                Processing a challenge
+	            accept              Accepting a challenge
                 forfeit				Forfeit on the current match
             help [command]     Display help
 ```
@@ -82,16 +82,16 @@ S: SVR PLAYERLIST ["<player>", ...]
 **Subscribing to a gametype:**  
 C: subscribe <gametype>  
 S: OK  
-->Subscired for <gametype>.  
+->Subscribed for <gametype>.  
 
 **Unsubscribe:**  
 C: unsubscribe  
 S: OK  
 ->Unsubscribed from the previously subscribed game.  
 
-**Match offered, message to both playerss:**  
+**Match offered, message to both players:**  
 S: SVR GAME MATCH {GAMETYPE: "<gametype>", PLAYERTOMOVE: "<name player1>", OPPONENT: "<name opponent>"}  
-->Now playing the match, subsciption for a gametype has expired.  
+->Now playing the match, subscription for a gametype has expired.  
 
 **Getting the turn in a match:**  
 S: SVR GAME YOURTURN {TURNMESSAGE: "<message for this turn>"}  
@@ -107,10 +107,10 @@ S: SVR GAME MOVE {PLAYER: "<player>", DETAILS: "<reaction on move>", MOVE: "<mov
 ->A move has been done, this message indicates who did the turn, what the turn is and wat the reaction from the game is.  
 
 **Result from receiving a match, message to both players:**  
-S: SVR GAME <player result> {PLAYERONESCORE: "<score player1>", PLAYERTWOSCORE: "<score player2>", COMMENT: "<ccomment on the result>"}  
+S: SVR GAME <player result> {PLAYERONESCORE: "<score player1>", PLAYERTWOSCORE: "<score player2>", COMMENT: "<comment on the result>"}  
 ->The match has ended, <player result> contains the value 'WIN', 'LOSS' or 'DRAW'.  
 
-**Forfeit a macht:**   
+**Forfeit a match:**   
 C: forfeit  
 S: OK  
 ->The player has given up, the server will send the result of the match to both players.  
@@ -123,23 +123,23 @@ S: SVR GAME <player result> {PLAYERONESCORE: "<score player1>", PLAYERTWOSCORE: 
 S: SVR GAME <speler result> {PLAYERONESCORE: "<score player1>", PLAYERTWOSCORE: "<score player2>", COMMENT: "Client disconnected"}  
 ->The match has ended, <player> disconnected.  
 
-**Challanging a player for a game:**  
+**Challenging a player for a game:**  
 C: challenge "<player>" "<gametype>"  
 S: OK  
-->The player is now challanged for a game. Previous challanges will be cancelled.  
+->The player is now challenged for a game. Previous challenges will be cancelled.  
 
-**Receiving a challange:**  
-S: SVR GAME CHALLENGE {CHALLENGER: <player>, GAMETYPE: <gametype>, CHALLENGENUMBER: <challangenumber>}  
-->Now the possibility to accept the challange.  
+**Receiving a challenge:**  
+S: SVR GAME CHALLENGE {CHALLENGER: <player>, GAMETYPE: <gametype>, CHALLENGENUMBER: <challengenumber>}  
+->Now the possibility to accept the challenge.  
 
-**Result of a challange that has expired:**  
-S: SVR GAME CHALLENGE CANCELLED {CHALLENGENUMBER: "<challange number>"}  
-->Challange has expired. Possible causes: player started another challange, player started a match or the player disconnected from the game.  
+**Result of a challenge that has expired:**  
+S: SVR GAME CHALLENGE CANCELLED {CHALLENGENUMBER: "<challenge number>"}  
+->Challenge has expired. Possible causes: player started another challenge, player started a match or the player disconnected from the game.  
 
-**Accepting a challange:**  
-C: challenge accept <challange number>  
+**Accepting a challenge:**  
+C: challenge accept <challenge number>  
 S: OK  
-->The challange has been excepted. The match will be started, message will follow.  
+->The challenge has been accepted. The match will be started, message will follow.  
 
 **Ask for help:**  
 C: help  
@@ -149,7 +149,7 @@ S: OK
 **Ask help for a specific command:**  
 C: help <command>  
 S: OK  
-->The cient asked for information for the <command> command, the server will answer with the information.  
+->The client asked for information for the <command> command, the server will answer with the information.  
 
 **Help information received:**  
 S: SVR HELP <help information>  
