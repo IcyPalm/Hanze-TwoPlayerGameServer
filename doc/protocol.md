@@ -123,14 +123,20 @@ S: SVR GAME <player result> {PLAYERONESCORE: "<score player1>", PLAYERTWOSCORE: 
 S: SVR GAME <speler result> {PLAYERONESCORE: "<score player1>", PLAYERTWOSCORE: "<score player2>", COMMENT: "Client disconnected"}  
 ->The match has ended, <player> disconnected.  
 
-**Challenging a player for a game:**  
+**Challenging player for a game with default's server turntime:**
 C: challenge "<player>" "<gametype>"  
 S: OK  
 ->The player is now challenged for a game. Previous challenges will be cancelled.  
 
-**Receiving a challenge:**  
-S: SVR GAME CHALLENGE {CHALLENGER: <player>, GAMETYPE: <gametype>, CHALLENGENUMBER: <challengenumber>}  
-->Now the possibility to accept the challenge.  
+**Challenging a player for a game with custom turntime:**
+C: challenge "<player>" "<gametype>" n  
+S: OK  
+-> Whereas 'n' can be written as an Integer, without quotationmarks.
+->The player is now challanged for a game. Previous challanges will be cancelled.
+
+**Receiving a challange:**  
+S: SVR GAME CHALLENGE {CHALLENGER: <player>, GAMETYPE: <gametype>, CHALLENGENUMBER: <challangenumber>, TURNTIME: <turntime>}  
+->Now the possibility to accept the challenge.
 
 **Result of a challenge that has expired:**  
 S: SVR GAME CHALLENGE CANCELLED {CHALLENGENUMBER: "<challenge number>"}  

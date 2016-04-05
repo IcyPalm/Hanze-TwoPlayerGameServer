@@ -22,6 +22,7 @@ public class ClientManager {
 	
 	private ArrayList<Client> clientList;
 	private Tournament tournament;
+	private int turntime;
 	
 	public ClientManager() {
 		clientList = new ArrayList<Client>();
@@ -124,18 +125,19 @@ public class ClientManager {
 		notifyListeners(client, ACTION_SUBSCRIBE);
 	}
 	
-	public void challenge(Client player, Client opponent, String gameType) {
+	public void challenge(Client player, Client opponent, String gameType, int turntime) {
 		// Cancel previous challenge, max 1 challenge
 		cancelChallenge(player.getChallenge(), true);
 		
-		Challenge challenge = new Challenge(player, opponent, gameType);
+		Challenge challenge = new Challenge(player, opponent, gameType, turntime);
 		player.setChallenge(challenge);
 		opponent.addChallenge(challenge);
 		
-		String challengeDetails = StringUtils.toStringAsMap("CHALLENGENUMBER", challenge.getChallengeNumber(), "CHALLENGER", player.getPlayerName(), "GAMETYPE", gameType);
+		String challengeDetails = StringUtils.toStringAsMap("CHALLENGENUMBER", challenge.getChallengeNumber(), "CHALLENGER", player.getPlayerName(), "GAMETYPE", gameType,
+				"TURNTIME", turntime);
 		opponent.writeResponse(new GameResponse(String.format("CHALLENGE %s", challengeDetails)));
 	}
-	
+
 	public void acceptChallenge(Challenge challenge) {
 		cancelChallenge(challenge, false);
 		
@@ -143,10 +145,11 @@ public class ClientManager {
 		ArrayList<Client> players = new ArrayList<Client>();
 		players.add(challenge.getPlayer());
 		players.add(challenge.getOpponent());
+
 		Collections.shuffle(players);
 		
 		// Start the match
-		Match match = createMatch(challenge.getGameType(), players.get(0), players.get(1));
+		Match match = createMatch(challenge.getGameType(), players.get(0), players.get(1), challenge.getTurnTime());
 		match.start();
 	}
 	
@@ -205,7 +208,8 @@ public class ClientManager {
 		Match match = null;
 		
 		if(players != null) {
-			match = new Match(gameType, players.get(0), players.get(1));
+			// TODO: When finding a match, users may insert turn time -> FUTURE.
+			match = new Match(gameType, players.get(0), players.get(1), null);
 			match.start();
 			
 			notifyListeners(players.get(0), ACTION_MATCH);
@@ -239,8 +243,8 @@ public class ClientManager {
 		findMatch(playerTwo);
 	}
 	
-	public Match createMatch(String gameType, Client playerOne, Client playerTwo) {
-		Match match = new Match(gameType, playerOne, playerTwo);
+	public Match createMatch(String gameType, Client playerOne, Client playerTwo, int turntime) {
+		Match match = new Match(gameType, playerOne, playerTwo, turntime);
 		notifyListeners(playerOne, ACTION_MATCH);
 		notifyListeners(playerTwo, ACTION_MATCH);
 		
@@ -278,7 +282,7 @@ public class ClientManager {
 		return client;
 	}
 	
-	public Tournament organiseTournament(String gameType) {
+	public Tournament organiseTournament(String gameType, int turntime) {
 		ArrayList<Client> playerList = new ArrayList<Client>();
 
 		for(Client c : clientList) {
@@ -287,7 +291,7 @@ public class ClientManager {
 			}
 		}
 
-		tournament = new Tournament(this, gameType, playerList);
+		tournament = new Tournament(this, gameType, playerList, turntime);
 		
 		return tournament;
 	}
