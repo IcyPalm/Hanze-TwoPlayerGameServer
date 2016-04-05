@@ -123,12 +123,12 @@ S: SVR GAME <player result> {PLAYERONESCORE: "<score player1>", PLAYERTWOSCORE: 
 S: SVR GAME <speler result> {PLAYERONESCORE: "<score player1>", PLAYERTWOSCORE: "<score player2>", COMMENT: "Client disconnected"}  
 ->The match has ended, <player> disconnected.  
 
-**Challanging a player for a game with default's server turntime:**  
+**Challenging player for a game with default's server turntime:**
 C: challenge "<player>" "<gametype>"  
 S: OK  
 ->The player is now challanged for a game. Previous challanges will be cancelled.  
 
-**Challanging a player for a game with custom turntime:**  
+**Challenging a player for a game with custom turntime:**
 C: challenge "<player>" "<gametype>" n  
 S: OK  
 -> Whereas 'n' can be written as an Integer, without quotationmarks.
