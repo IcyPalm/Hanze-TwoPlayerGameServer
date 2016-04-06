@@ -20,29 +20,29 @@ public class ChallengeCommandHandler extends AbstractCommandHandler {
 
 	@Override
 	public void handleCommand(Client client, Command command) {
-		if(!client.isLoggedIn()) {
+		if (!client.isLoggedIn()) {
 			client.writeResponse(new ErrorResponse("Not logged in"));
 			return;
 		}
 
-		if(client.getCurrentMatch() != null) {
+		if (client.getCurrentMatch() != null) {
 			client.writeResponse(new ErrorResponse("Currently in match"));
 		}
 
-		if(Application.getInstance().getGameServer().getClientManager().getTournament() != null) {
+		if (Application.getInstance().getGameServer().getClientManager().getTournament() != null) {
 			client.writeResponse(new ErrorResponse("Tournament in progress"));
 		}
 
 		boolean accept = false;
 
-		if(command.getArgument().length() >= ARGUMENT_ACCEPT.length()) {
-			if(command.getArgument().substring(0, ARGUMENT_ACCEPT.length()).equalsIgnoreCase(ARGUMENT_ACCEPT)) {
+		if (command.getArgument().length() >= ARGUMENT_ACCEPT.length()) {
+			if (command.getArgument().substring(0, ARGUMENT_ACCEPT.length()).equalsIgnoreCase(ARGUMENT_ACCEPT)) {
 				accept = true;
 			}
 		}
 
 		try {
-			if(accept) {
+			if (accept) {
 				handleAccept(client, command);
 			} else {
 				handleChallenge(client, command);
@@ -56,7 +56,7 @@ public class ChallengeCommandHandler extends AbstractCommandHandler {
 		int challengeNumber = parseAcceptArgument(command.getArgument());
 		Challenge challenge = client.getChallenge(challengeNumber);
 
-		if(challenge == null) {
+		if (challenge == null) {
 			client.writeResponse(new ErrorResponse(String.format("Invalid challenge number '%d'", challengeNumber)));
 			return;
 		}
@@ -75,40 +75,48 @@ public class ChallengeCommandHandler extends AbstractCommandHandler {
 		String[] playerNameGameType = parseChallengeArgument(command.getArgument());
 		String playerName = playerNameGameType[0].trim();
 		String gameType = playerNameGameType[1].trim();
+		int turnTime = Integer.parseInt(playerNameGameType[2].trim());
 
-		if(playerName.trim().equals("") || gameType.equals("")) {
+
+		if (playerName.trim().equals("") || gameType.equals("")) {
 			client.writeResponse(new ErrorResponse("No player name or game name entered"));
 			return;
 		}
 
 		Client player = client.getClientManager().getClientByName(playerName);
 
-		if(player == null) {
+		if (player == null) {
 			client.writeResponse(new ErrorResponse(String.format("Unknown player: '%s'", playerName)));
 			return;
 		}
 
-		if(!Application.getInstance().getGameLoader().getGameTypeList().contains(gameType)) {
+		if (!Application.getInstance().getGameLoader().getGameTypeList().contains(gameType)) {
 			client.writeResponse(new ErrorResponse(String.format("Unknown game: '%s'", gameType)));
 			return;
 		}
 
-		if(player.equals(client)) {
+		if (player.equals(client)) {
 			client.writeResponse(new ErrorResponse("Cannot challenge self"));
 		}
 
 		// All OK, challenge player
 		client.writeResponse(Response.OK);
-		client.getClientManager().challenge(client, player, gameType);
+		client.getClientManager().challenge(client, player, gameType, turnTime);
 	}
 
 	private String[] parseChallengeArgument(String argument) throws Exception {
-		String[] playerNameGameType = new String[2];
+		String[] playerNameGameType = new String[3];
 		Arrays.fill(playerNameGameType, "");
 
 		String[] arguments = argument.split("\"");
 		playerNameGameType[0] = arguments[1];
 		playerNameGameType[1] = arguments[3];
+
+		if (arguments.length > 4) {
+			playerNameGameType[2] = arguments[4];
+		} else {
+			playerNameGameType[2] = "" + Application.getInstance().getSettings().getTurnTimeLimit();
+		}
 
 		return playerNameGameType;
 	}
