@@ -10,6 +10,18 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+/**
+ * This class creates a simple command handler to send small messages to
+ * other players. The command will be used as:
+ * (message || msg) "playername" "Do you also like cats?!"
+ *
+ * The max message size is 140 chars (trimmed). This limit is set to prevent overflowing.
+ * the server.
+ *
+ * @author Rutger Roffel
+ * @version 0.1
+ * @since 06-04-2016
+ */
 public class MessageCommandHandler extends AbstractCommandHandler {
 
 
@@ -31,6 +43,14 @@ public class MessageCommandHandler extends AbstractCommandHandler {
         }
     }
 
+    /**
+     * This method receives the command, sends is to a parser and sends
+     * the message to the other client.
+     * There are some checks involved (size, valid player etc.)
+     * @param client
+     * @param command
+     * @throws Exception
+     */
     private void handleSay(Client client, Command command) throws Exception {
         List<String> playerNameText = parseMessageArgument(command.getArgument());
         String playerName = playerNameText.get(0);
@@ -61,6 +81,13 @@ public class MessageCommandHandler extends AbstractCommandHandler {
         client.getClientManager().message(client, player, message);
     }
 
+    /**
+     * This method creates a list of all the arguments. The first entry
+     * is the sender, the rest of the entries are part of the message
+     * @param argument
+     * @return
+     * @throws Exception
+     */
     private List<String> parseMessageArgument(String argument) throws Exception {
         return Stream.of(argument.split(" ")).collect(Collectors.toList());
     }
