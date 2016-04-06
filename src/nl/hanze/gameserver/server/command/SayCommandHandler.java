@@ -37,11 +37,10 @@ public class SayCommandHandler extends AbstractCommandHandler {
         Client player = client.getClientManager().getClientByName(playerName);
 
         if (player == null) {
-            client.writeResponse(new ErrorResponse(String.format("Unknown player: '%s'", playerName)));
+            client.writeResponse(new ErrorResponse(String.format("Unknown player: '%s'", player.getPlayerName())));
             return;
-        }
-        else if(client.getPlayerName().equals(player)){
-            client.writeResponse(new ErrorResponse(String.format("It is pointless to send a message to yourself, '%s'", playerName)));
+        } else if(client.getPlayerName().equals(player.getPlayerName())){
+            client.writeResponse(new ErrorResponse(String.format("It is pointless to send a message to yourself %s", player.getPlayerName())));
             return;
         }
 

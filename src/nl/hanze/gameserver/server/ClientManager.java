@@ -140,7 +140,7 @@ public class ClientManager {
 	}
 
 	public void say(Client player, Client opponent, String chatText) {
-		String chatString = "CHAT " + player.getPlayerName() + ": " + chatText;
+		String chatString = "SAY " + player.getPlayerName() + ": " + chatText;
 		opponent.writeResponse(new Response(Response.Status.SVR, chatString));
 	}
 
