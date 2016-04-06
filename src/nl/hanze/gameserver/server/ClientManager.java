@@ -139,8 +139,8 @@ public class ClientManager {
 		opponent.writeResponse(new GameResponse(String.format("CHALLENGE %s", challengeDetails)));
 	}
 
-	public void say(Client player, Client opponent, String chatText) {
-		String chatString = "SAY " + player.getPlayerName() + ": " + chatText;
+	public void message(Client player, Client opponent, String chatText) {
+		String chatString = "MESSAGE " + player.getPlayerName() + ": " + chatText;
 		opponent.writeResponse(new Response(Response.Status.SVR, chatString));
 	}
 

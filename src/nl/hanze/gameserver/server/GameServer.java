@@ -45,7 +45,7 @@ public class GameServer implements Runnable {
 		commandHandlerResolver.addHandler(new ForfeitCommandHandler());
 		commandHandlerResolver.addHandler(new ChallengeCommandHandler());
 		commandHandlerResolver.addHandler(new HelpCommandHandler());
-		commandHandlerResolver.addHandler(new SayCommandHandler());
+		commandHandlerResolver.addHandler(new MessageCommandHandler());
 		
 		clientInputHandler = new ClientInputHandler(commandHandlerResolver);
 		

@@ -10,11 +10,11 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class SayCommandHandler extends AbstractCommandHandler {
+public class MessageCommandHandler extends AbstractCommandHandler {
 
 
-    public SayCommandHandler() {
-        super("say");
+    public MessageCommandHandler() {
+        super("message");
     }
 
     @Override
@@ -32,7 +32,7 @@ public class SayCommandHandler extends AbstractCommandHandler {
     }
 
     private void handleSay(Client client, Command command) throws Exception {
-        List<String> playerNameText = parseChallengeArgument(command.getArgument());
+        List<String> playerNameText = parseMessageArgument(command.getArgument());
         String playerName = playerNameText.get(0);
         Client player = client.getClientManager().getClientByName(playerName);
 
@@ -50,18 +50,18 @@ public class SayCommandHandler extends AbstractCommandHandler {
             sb.append(" ");
         }
 
-        String chatText = sb.toString().trim();
-        if (chatText.length() == 0) {
-            client.writeResponse(new ErrorResponse("Empty message"));
+        String message = sb.toString().trim();
+        if (message.length() == 0 || message.length() > 140) {
+            client.writeResponse(new ErrorResponse("The message length is not according to the requirements"));
             return;
         }
 
         // All OK, send to the player
         client.writeResponse(Response.OK);
-        client.getClientManager().say(client, player, chatText);
+        client.getClientManager().message(client, player, message);
     }
 
-    private List<String> parseChallengeArgument(String argument) throws Exception {
+    private List<String> parseMessageArgument(String argument) throws Exception {
         return Stream.of(argument.split(" ")).collect(Collectors.toList());
     }
 
@@ -73,7 +73,7 @@ public class SayCommandHandler extends AbstractCommandHandler {
     @Override
     public ArrayList<String> getUsage() {
         ArrayList<String> responseList = new ArrayList<>();
-        responseList.add("usage: say [username] [message]");
+        responseList.add("usage: message [username] [message]");
         responseList.add("send a message to another player");
         return responseList;
     }
