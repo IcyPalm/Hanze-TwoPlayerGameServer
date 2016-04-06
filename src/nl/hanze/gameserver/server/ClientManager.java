@@ -7,6 +7,7 @@ import java.util.Collections;
 
 import nl.hanze.gameserver.app.Application;
 import nl.hanze.gameserver.server.message.GameResponse;
+import nl.hanze.gameserver.server.message.Response;
 import nl.hanze.gameserver.util.Log;
 import nl.hanze.gameserver.util.StringUtils;
 
@@ -136,6 +137,11 @@ public class ClientManager {
 		String challengeDetails = StringUtils.toStringAsMap("CHALLENGENUMBER", challenge.getChallengeNumber(), "CHALLENGER", player.getPlayerName(), "GAMETYPE", gameType,
 				"TURNTIME", turntime);
 		opponent.writeResponse(new GameResponse(String.format("CHALLENGE %s", challengeDetails)));
+	}
+
+	public void say(Client player, Client opponent, String chatText) {
+		String chatString = "CHAT " + player.getPlayerName() + ": " + chatText;
+		opponent.writeResponse(new Response(Response.Status.SVR, chatString));
 	}
 
 	public void acceptChallenge(Challenge challenge) {

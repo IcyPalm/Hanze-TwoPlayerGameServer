@@ -128,7 +128,7 @@ public class ChallengeCommandHandler extends AbstractCommandHandler {
 
 	@Override
 	public ArrayList<String> getUsage() {
-		ArrayList<String> responseList = new ArrayList<String>();
+		ArrayList<String> responseList = new ArrayList<>();
 
 		responseList.add("usage: challenge [accept] [args]");
 		responseList.add("");
