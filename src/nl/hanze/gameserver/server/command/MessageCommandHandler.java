@@ -12,8 +12,8 @@ import java.util.stream.Stream;
 
 /**
  * This class creates a simple command handler to send small messages to
- * other players. The command will be used as:
- * (message || msg) "playername" "Do you also like cats?!"
+ * other players. The command can be used as:
+ * (message || msg) playername Do you also like cats?!
  *
  * The max message size is 140 chars (trimmed). This limit is set to prevent overflowing.
  * the server.
