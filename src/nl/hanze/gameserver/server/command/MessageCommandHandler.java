@@ -14,7 +14,7 @@ public class MessageCommandHandler extends AbstractCommandHandler {
 
 
     public MessageCommandHandler() {
-        super("message");
+        super("message", "msg");
     }
 
     @Override
