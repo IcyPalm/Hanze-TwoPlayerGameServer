@@ -27,8 +27,10 @@ public class Tournament {
 	private ArrayList<KeyValuePair<Client, Client>> roundList;
 	private HashMap<KeyValuePair<Client, Client>, KeyValuePair<Integer, Integer>> results;
 	private Match currentMatch;
-	
-	public Tournament(ClientManager clientManager, String gameType, ArrayList<Client> players) {
+	private int turntime;
+
+	public Tournament(ClientManager clientManager, String gameType, ArrayList<Client> players, int turntime) {
+		this.turntime = turntime;
 		this.gameType = gameType;
 		this.players = players;
 		listenerList = new ArrayList<ActionListener>();
@@ -49,7 +51,7 @@ public class Tournament {
 		}
 		
 		KeyValuePair<Client, Client> round = currentRound();
-		currentMatch = Application.getInstance().getGameServer().getClientManager().createMatch(gameType, round.getKey(), round.getValue());
+		currentMatch = Application.getInstance().getGameServer().getClientManager().createMatch(gameType, round.getKey(), round.getValue(), turntime);
 		
 		notifyListeners(ACTION_NEXT_ROUND);
 		

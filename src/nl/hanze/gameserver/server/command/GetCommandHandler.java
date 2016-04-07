@@ -17,10 +17,10 @@ public class GetCommandHandler extends AbstractCommandHandler {
 
 	@Override
 	public void handleCommand(Client client, Command command) {
-		if(command.getArgument().equalsIgnoreCase("gamelist")) {
+		if (command.getArgument().equalsIgnoreCase("gamelist")) {
 			client.writeResponse(Response.OK);
 			client.writeResponse(new Response(Response.Status.SVR, String.format("GAMELIST %s", getGameListString())));
-		} else if(command.getArgument().equals("playerlist")) {
+		} else if (command.getArgument().equalsIgnoreCase("playerlist")) {
 			client.writeResponse(Response.OK);
 			client.writeResponse(new Response(Response.Status.SVR, String.format("PLAYERLIST %s", getPlayerListString())));
 		} else {
@@ -31,7 +31,7 @@ public class GetCommandHandler extends AbstractCommandHandler {
 	public String getPlayerListString() {
 		ArrayList<Client> playerList = Application.getInstance().getGameServer().getClientManager().getPlayerList();
 		ArrayList<String> playerNameList = new ArrayList<String>(playerList.size());
-		for(Client client : playerList) {
+		for (Client client : playerList) {
 			playerNameList.add(client.getPlayerName());
 		}
 
