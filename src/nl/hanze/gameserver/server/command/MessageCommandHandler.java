@@ -54,9 +54,7 @@ public class MessageCommandHandler extends AbstractCommandHandler {
 		String[] playerNameText = parseMessageArgument(command.getArgument());
 		String playerName = playerNameText[0];
 		String message = playerNameText[1];
-
 		Client player = client.getClientManager().getClientByName(playerName);
-
 		if (message == null || message.length() == 0) {
 			client.writeResponse(new ErrorResponse("The message should not be empty"));
 			return;
@@ -65,9 +63,8 @@ public class MessageCommandHandler extends AbstractCommandHandler {
 			client.writeResponse(new ErrorResponse("Messages should not contain more than 140 characters"));
 			return;
 		}
-
 		if (player == null) {
-			client.writeResponse(new ErrorResponse(String.format("Unknown player: '%s'", player.getPlayerName())));
+			client.writeResponse(new ErrorResponse(String.format("Unknown player: '%s'", playerName)));
 			return;
 		} else if(client.getPlayerName().equals(player.getPlayerName())){
 			client.writeResponse(new ErrorResponse(String.format("It is pointless to send a message to yourself %s", player.getPlayerName())));
