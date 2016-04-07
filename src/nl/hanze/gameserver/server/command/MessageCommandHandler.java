@@ -52,10 +52,16 @@ public class MessageCommandHandler extends AbstractCommandHandler {
      * @throws Exception
      */
     private void handleSay(Client client, Command command) throws Exception {
-        List<String> playerNameText = parseMessageArgument(command.getArgument());
-        String playerName = playerNameText.get(0);
+        String[] playerNameText = parseMessageArgument(command.getArgument());
+        String playerName = playerNameText[0];
+        String message = playerNameText[1];
+
         Client player = client.getClientManager().getClientByName(playerName);
 
+        if (message == null || message.length() == 0 || message.length() > 140) {
+            client.writeResponse(new ErrorResponse("The message length is not according to the requirements"));
+            return;
+        }
         if (player == null) {
             client.writeResponse(new ErrorResponse(String.format("Unknown player: '%s'", player.getPlayerName())));
             return;
@@ -64,17 +70,7 @@ public class MessageCommandHandler extends AbstractCommandHandler {
             return;
         }
 
-        StringBuilder sb = new StringBuilder();
-        for (int i = 1; i < playerNameText.size(); i++) {
-            sb.append(playerNameText.get(i));
-            sb.append(" ");
-        }
 
-        String message = sb.toString().trim();
-        if (message.length() == 0 || message.length() > 140) {
-            client.writeResponse(new ErrorResponse("The message length is not according to the requirements"));
-            return;
-        }
 
         // All OK, send to the player
         client.writeResponse(Response.OK);
@@ -82,14 +78,30 @@ public class MessageCommandHandler extends AbstractCommandHandler {
     }
 
     /**
-     * This method creates a list of all the arguments. The first entry
-     * is the sender, the rest of the entries are part of the message
+     * This method creates an array with the parsed arguments
+     * The first entry is the username and the second is the message
      * @param argument
      * @return
      * @throws Exception
      */
-    private List<String> parseMessageArgument(String argument) throws Exception {
-        return Stream.of(argument.split(" ")).collect(Collectors.toList());
+    private String[] parseMessageArgument(String argument) throws Exception {
+        String[] parsed = new String[2];
+        List<String> arguments = Stream.of(argument.split("\"")).collect(Collectors.toList());
+        if(!arguments.get(0).equals("")){
+            return parsed;
+        }
+        String username = arguments.get(1);
+        username = username.replace("\"", "");
+        StringBuilder message = new StringBuilder();
+        for (int i = 2; i < arguments.size(); i++) {
+            message.append(arguments.get(i));
+            message.append(" ");
+        }
+
+        parsed[0] = username.trim();
+        parsed[1] = message.toString().trim();
+
+        return parsed;
     }
 
     @Override
