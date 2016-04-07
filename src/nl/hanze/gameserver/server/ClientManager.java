@@ -140,7 +140,7 @@ public class ClientManager {
 	}
 
 	public void message(Client player, Client opponent, String chatText) {
-		String chatString = "MESSAGE " + player.getPlayerName() + ": " + chatText;
+		String chatString = "MESSAGE {PLAYERNAME: \"" + player.getPlayerName() + "\", MESSAGE: \"" + chatText + "\"}";
 		opponent.writeResponse(new Response(Response.Status.SVR, chatString));
 	}
 
