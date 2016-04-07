@@ -66,14 +66,14 @@ public class ClientInputHandler implements Runnable {
 				
 				// Get client input buffer and add data
 				ByteBuffer inputBuffer = getInputBuffer(client);
-                try {
-                    inputBuffer.put(data);
-                }
-                catch (BufferOverflowException bf) {
-                    client.writeResponse(new ErrorResponse("Username too long"));
-                    client.disconnect();
-                    continue;
-                }
+				try {
+					inputBuffer.put(data);
+				}
+				catch (BufferOverflowException bf) {
+					client.writeResponse(new ErrorResponse("Payload too large"));
+					client.disconnect();
+					continue;
+				}
 				inputBuffer.flip();
 				
 				// Read and remove commands from client input buffer
