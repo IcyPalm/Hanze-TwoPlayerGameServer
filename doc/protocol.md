@@ -7,37 +7,38 @@
 ```
 OK          Command accepted
 ERR         Command denied
-SVR [HELP | GAME [MATCH {GAMETYPE, PLAYERTOMOVE, OPPONENT} | YOURTURN | MOVE | CHALLENGE | [WIN | LOSS | DRAW]] | GAMELIST | PLAYERLIST]
-            Message from server
+SVR [HELP | GAME [MATCH {GAMETYPE, PLAYERTOMOVE, OPPONENT} | YOURTURN | MOVE | CHALLENGE | [WIN | LOSS | DRAW]] | MESSAGE | GAMELIST | PLAYERLIST]
+
+	Message from server
     HELP            Message with help information
+    MESSAGE			Receive a message from another client
     GAME            Message concerning the game
-    	GAMELIST 	Returns a list of games as ["<gametype>",..]
-    	PLAYERLIST 	Returns a list of players as ["<player>",..]
-        MATCH           Assigning a match with {GAMETYPE, PLAYERTOMOVE, OPPONENT}
-        YOURTURN        Notification of turns during the match
-        MOVE            Moving during the match
-        CHALLENGE       Message about a challenge
-            WIN             Receiver won the game
-            LOSS            Receiver lost the game
-            DRAW            Match ended in a draw
+    GAMELIST 		Returns a list of games as ["<gametype>",..]
+    PLAYERLIST 		Returns a list of players as ["<player>",..]
+    MATCH           Assigning a match with {GAMETYPE, PLAYERTOMOVE, OPPONENT}
+    YOURTURN        Notification of turns during the match
+    MOVE            Moving during the match
+    CHALLENGE       Message about a challenge
+    WIN             Receiver won the game
+    LOSS            Receiver lost the game
+    DRAW            Match ended in a draw
 ```
 ##### Overview of client-commands:
 ```
-login           Login as speler
+login           					Login as a player
 logout | exit | quit | disconnect | bye
-		        Logout or disconnect
-get <gamelist | playerlist>
-                Data retrieval
-            gamelist            Requesting the list of supported game modes
-	        playerlist          Requesting the list of registered player
-            subscribe           Subscribe for a gametype
-            unsubscribe         Unsubscribe for a gametype
-            move                Do a move in a match
-            challenge [accept | forfeit]  
-                                Processing a challenge
-	            accept              Accepting a challenge
-                forfeit				Forfeit on the current match
-            help [command]     Display help
+		        					Logout or disconnect
+message | msg						Send a message to another client
+get <gamelist | playerlist>			Data retrieval
+	gamelist            			Requesting the list of supported 							game modes
+	playerlist          			Requesting the list of registered players
+subscribe							Subscribe for a gametype
+unsubscribe         				Unsubscribe for a gametype
+move                				Do a move in a match
+challenge [accept | forfeit]		Processing a challenge
+	accept              			Accepting a challenge
+	forfeit							Forfeit on the current match
+help [command]						Display help
 ```
 
 ### Commands in detail
@@ -88,6 +89,11 @@ S: OK
 C: unsubscribe  
 S: OK  
 ->Unsubscribed from the previously subscribed game.  
+
+**Message:**  
+C: message | msg "name" <the message>  
+S: OK  
+-> Message has been send to the client
 
 **Match offered, message to both players:**  
 S: SVR GAME MATCH {GAMETYPE: "<gametype>", PLAYERTOMOVE: "<name player1>", OPPONENT: "<name opponent>"}  
