@@ -24,96 +24,93 @@ import java.util.stream.Stream;
  */
 public class MessageCommandHandler extends AbstractCommandHandler {
 
+	public MessageCommandHandler() {
+		super("message", "msg");
+	}
 
-    public MessageCommandHandler() {
-        super("message", "msg");
-    }
+	@Override
+	public void handleCommand(Client client, Command command) {
+		if (!client.isLoggedIn()) {
+			client.writeResponse(new ErrorResponse("Not logged in"));
+			System.out.println(command.getArgument());
+			return;
+		}
+		try {
+			handleSay(client, command);
+		} catch (Exception e) {
+			client.writeResponse(new ErrorResponse(e.toString()));
+		}
+	}
 
-    @Override
-    public void handleCommand(Client client, Command command) {
-        if (!client.isLoggedIn()) {
-            client.writeResponse(new ErrorResponse("Not logged in"));
-            System.out.println(command.getArgument());
-            return;
-        }
-        try {
-            handleSay(client, command);
-        } catch (Exception e) {
-            client.writeResponse(new ErrorResponse(e.toString()));
-        }
-    }
+	/**
+	 * This method receives the command, sends is to a parser and sends
+	 * the message to the other client.
+	 * There are some checks involved (size, valid player etc.)
+	 * @param client
+	 * @param command
+	 * @throws Exception
+	 */
+	private void handleSay(Client client, Command command) throws Exception {
+		String[] playerNameText = parseMessageArgument(command.getArgument());
+		String playerName = playerNameText[0];
+		String message = playerNameText[1];
 
-    /**
-     * This method receives the command, sends is to a parser and sends
-     * the message to the other client.
-     * There are some checks involved (size, valid player etc.)
-     * @param client
-     * @param command
-     * @throws Exception
-     */
-    private void handleSay(Client client, Command command) throws Exception {
-        String[] playerNameText = parseMessageArgument(command.getArgument());
-        String playerName = playerNameText[0];
-        String message = playerNameText[1];
+		Client player = client.getClientManager().getClientByName(playerName);
 
-        Client player = client.getClientManager().getClientByName(playerName);
+		if (message == null || message.length() == 0 || message.length() > 140) {
+			client.writeResponse(new ErrorResponse("The message length is not according to the requirements"));
+			return;
+		}
+		if (player == null) {
+			client.writeResponse(new ErrorResponse(String.format("Unknown player: '%s'", player.getPlayerName())));
+			return;
+		} else if(client.getPlayerName().equals(player.getPlayerName())){
+			client.writeResponse(new ErrorResponse(String.format("It is pointless to send a message to yourself %s", player.getPlayerName())));
+			return;
+		}
 
-        if (message == null || message.length() == 0 || message.length() > 140) {
-            client.writeResponse(new ErrorResponse("The message length is not according to the requirements"));
-            return;
-        }
-        if (player == null) {
-            client.writeResponse(new ErrorResponse(String.format("Unknown player: '%s'", player.getPlayerName())));
-            return;
-        } else if(client.getPlayerName().equals(player.getPlayerName())){
-            client.writeResponse(new ErrorResponse(String.format("It is pointless to send a message to yourself %s", player.getPlayerName())));
-            return;
-        }
+		// All OK, send to the player
+		client.writeResponse(Response.OK);
+		client.getClientManager().message(client, player, message);
+	}
 
+	/**
+	 * This method creates an array with the parsed arguments
+	 * The first entry is the username and the second is the message
+	 * @param argument
+	 * @return
+	 * @throws Exception
+	 */
+	private String[] parseMessageArgument(String argument) throws Exception {
+		String[] parsed = new String[2];
+		List<String> arguments = Stream.of(argument.split("\"")).collect(Collectors.toList());
+		if(!arguments.get(0).equals("")){
+			return parsed;
+		}
+		String username = arguments.get(1);
+		username = username.replace("\"", "");
+		StringBuilder message = new StringBuilder();
+		for (int i = 2; i < arguments.size(); i++) {
+			message.append(arguments.get(i));
+			message.append(" ");
+		}
 
+		parsed[0] = username.trim();
+		parsed[1] = message.toString().trim();
 
-        // All OK, send to the player
-        client.writeResponse(Response.OK);
-        client.getClientManager().message(client, player, message);
-    }
+		return parsed;
+	}
 
-    /**
-     * This method creates an array with the parsed arguments
-     * The first entry is the username and the second is the message
-     * @param argument
-     * @return
-     * @throws Exception
-     */
-    private String[] parseMessageArgument(String argument) throws Exception {
-        String[] parsed = new String[2];
-        List<String> arguments = Stream.of(argument.split("\"")).collect(Collectors.toList());
-        if(!arguments.get(0).equals("")){
-            return parsed;
-        }
-        String username = arguments.get(1);
-        username = username.replace("\"", "");
-        StringBuilder message = new StringBuilder();
-        for (int i = 2; i < arguments.size(); i++) {
-            message.append(arguments.get(i));
-            message.append(" ");
-        }
+	@Override
+	public String getDescription() {
+		return "Say things to others";
+	}
 
-        parsed[0] = username.trim();
-        parsed[1] = message.toString().trim();
-
-        return parsed;
-    }
-
-    @Override
-    public String getDescription() {
-        return "Say things to others";
-    }
-
-    @Override
-    public ArrayList<String> getUsage() {
-        ArrayList<String> responseList = new ArrayList<>();
-        responseList.add("usage: message [username] [message]");
-        responseList.add("send a message to another player");
-        return responseList;
-    }
+	@Override
+	public ArrayList<String> getUsage() {
+		ArrayList<String> responseList = new ArrayList<>();
+		responseList.add("usage: message [username] [message]");
+		responseList.add("send a message to another player");
+		return responseList;
+	}
 }
