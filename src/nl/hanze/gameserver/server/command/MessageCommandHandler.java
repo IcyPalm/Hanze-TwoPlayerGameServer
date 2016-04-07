@@ -57,10 +57,15 @@ public class MessageCommandHandler extends AbstractCommandHandler {
 
 		Client player = client.getClientManager().getClientByName(playerName);
 
-		if (message == null || message.length() == 0 || message.length() > 140) {
-			client.writeResponse(new ErrorResponse("The message length is not according to the requirements"));
+		if (message == null || message.length() == 0) {
+			client.writeResponse(new ErrorResponse("The message should not be empty"));
 			return;
 		}
+        else if (message.length() > 140) {
+            client.writeResponse(new ErrorResponse("Messages should not contain more than 140 characters"));
+            return;
+        }
+
 		if (player == null) {
 			client.writeResponse(new ErrorResponse(String.format("Unknown player: '%s'", player.getPlayerName())));
 			return;
