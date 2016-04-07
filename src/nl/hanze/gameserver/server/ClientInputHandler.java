@@ -1,5 +1,6 @@
 package nl.hanze.gameserver.server;
 
+import java.nio.BufferOverflowException;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -9,6 +10,7 @@ import nl.hanze.gameserver.app.Application;
 import nl.hanze.gameserver.server.command.CommandHandlerResolver;
 import nl.hanze.gameserver.server.command.ICommandHandler;
 import nl.hanze.gameserver.server.message.Command;
+import nl.hanze.gameserver.server.message.ErrorResponse;
 import nl.hanze.gameserver.util.ByteUtils;
 import nl.hanze.gameserver.util.KeyValuePair;
 import nl.hanze.gameserver.util.Log;
@@ -64,7 +66,14 @@ public class ClientInputHandler implements Runnable {
 				
 				// Get client input buffer and add data
 				ByteBuffer inputBuffer = getInputBuffer(client);
-				inputBuffer.put(data);
+                try {
+                    inputBuffer.put(data);
+                }
+                catch (BufferOverflowException bf) {
+                    client.writeResponse(new ErrorResponse("Username too long"));
+                    client.disconnect();
+                    continue;
+                }
 				inputBuffer.flip();
 				
 				// Read and remove commands from client input buffer
