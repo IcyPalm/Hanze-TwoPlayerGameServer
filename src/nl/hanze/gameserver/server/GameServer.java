@@ -11,17 +11,7 @@ import java.util.Iterator;
 import java.util.Set;
 
 import nl.hanze.gameserver.app.Application;
-import nl.hanze.gameserver.server.command.ChallengeCommandHandler;
-import nl.hanze.gameserver.server.command.CommandHandlerResolver;
-import nl.hanze.gameserver.server.command.ForfeitCommandHandler;
-import nl.hanze.gameserver.server.command.GetCommandHandler;
-import nl.hanze.gameserver.server.command.HelpCommandHandler;
-import nl.hanze.gameserver.server.command.LoginCommandHandler;
-import nl.hanze.gameserver.server.command.LogoutCommandHandler;
-import nl.hanze.gameserver.server.command.MoveCommandHandler;
-import nl.hanze.gameserver.server.command.SubscribeCommandHandler;
-import nl.hanze.gameserver.server.command.UnsupportedCommandHandler;
-import nl.hanze.gameserver.server.command.UnsubscribeCommandHandler;
+import nl.hanze.gameserver.server.command.*;
 import nl.hanze.gameserver.util.Log;
 import nl.hanze.gameserver.util.ReadWriteBuffer;
 
@@ -55,6 +45,7 @@ public class GameServer implements Runnable {
 		commandHandlerResolver.addHandler(new ForfeitCommandHandler());
 		commandHandlerResolver.addHandler(new ChallengeCommandHandler());
 		commandHandlerResolver.addHandler(new HelpCommandHandler());
+		commandHandlerResolver.addHandler(new MessageCommandHandler());
 		
 		clientInputHandler = new ClientInputHandler(commandHandlerResolver);
 		
