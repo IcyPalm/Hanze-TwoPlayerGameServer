@@ -1,4 +1,4 @@
-package trackbackers.strategicgamework.gamemodules.server.tictactoe;
+package nl.hanze.t23i.gamemodule.extern.tictactoe;
 
 public enum PlayerType {
     NONE(' '), PLAYER_ONE('X'), PLAYER_TWO('O');

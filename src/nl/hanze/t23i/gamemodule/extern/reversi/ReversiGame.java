@@ -1,4 +1,4 @@
-package trackbackers.strategicgamework.gamemodules.server.reversi;
+package nl.hanze.t23i.gamemodule.extern.reversi;
 
 import java.awt.Component;
 import java.util.HashMap;

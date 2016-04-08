@@ -1,4 +1,4 @@
-package trackbackers.strategicgamework.gamemodules.server.reversi;
+package nl.hanze.t23i.gamemodule.extern.reversi;
 
 public enum PlayerType {
     NONE, PLAYER_ONE, PLAYER_TWO;

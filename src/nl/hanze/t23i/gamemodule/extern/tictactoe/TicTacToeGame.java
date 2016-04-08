@@ -1,4 +1,4 @@
-package trackbackers.strategicgamework.gamemodules.server.tictactoe;
+package nl.hanze.t23i.gamemodule.extern.tictactoe;
 
 import java.awt.Component;
 import java.util.HashMap;
