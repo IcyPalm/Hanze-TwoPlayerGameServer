@@ -198,13 +198,13 @@ public class GameServer implements Runnable {
 			key.cancel();
 			key.attach(null);
 		} catch (IOException e) {
-			;
+			e.printStackTrace();
 		}
 		catch (NullPointerException e) {
 			System.out.println("Client already disconnected.");
 		}
 		catch (Exception e) {
-			;
+			e.printStackTrace();
 		}
 	}
 
@@ -241,32 +241,32 @@ public class GameServer implements Runnable {
 						disconnect(key);
 					}
 				} catch (Exception e) {
-					;
+					e.printStackTrace();
 				}
 			}
 		} catch (Exception e) {
-			;
+			e.printStackTrace();
 		}
 
 		try {
 			Log.DEBUG.println("Closing client input handler");
 			clientInputHandler.exit();
 		} catch (Exception e) {
-			;
+			e.printStackTrace();
 		}
 
 		try {
 			Log.DEBUG.println("Closing server selector");
 			selector.close();
 		} catch (IOException e) {
-			;
+			e.printStackTrace();
 		}
 
 		try {
 			Log.DEBUG.println("Closing server socket");
 			serverSocketChannel.close();
 		} catch (IOException e) {
-			;
+			e.printStackTrace();
 		}
 	}
 
