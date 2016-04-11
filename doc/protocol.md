@@ -104,9 +104,9 @@ S: SVR GAME YOURTURN {TURNMESSAGE: "\<message for this turn\>"}
 ->Now the possibility to do a turn.  
 
 **Making a move after you get the possibility to do a turn:**  
-C: move \<move\> 
-S: OK
-->The move is accepted by the server, result for the game will follow.
+C: move \<move\>  
+S: OK  
+->The move is accepted by the server, result for the game will follow.  
 
 The \<move\> is an integer representation of a row and column. The \<move\> can be computed to a row and column with the following pseudocode:
 
@@ -114,6 +114,17 @@ The \<move\> is an integer representation of a row and column. The \<move\> can 
 int row = <move> / maxRows
 int column <move> % maxColumn
 ```
+
+A practical example of this:
+
+C: MOVE 63  
+_Server interprets this as:_  
+```
+int row = 63 / 8 = 7
+int col = 63 % 8 = 7
+```
+S: OK  
+
 
 **Result from move received, message to both players:**  
 S: SVR GAME MOVE {PLAYER: "\<player\>", DETAILS: "\<reaction on move\>", MOVE: "\<move\>"}  
