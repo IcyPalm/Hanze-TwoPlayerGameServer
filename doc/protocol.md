@@ -34,7 +34,7 @@ get <gamelist | playerlist>			Data retrieval
 	playerlist          			Requesting the list of registered players
 subscribe							Subscribe for a gametype
 unsubscribe         				Unsubscribe for a gametype
-move                				Do a move in a match
+move <move>               			Do a move in a match
 challenge [accept | forfeit]		Processing a challenge
 	accept              			Accepting a challenge
 	forfeit							Forfeit on the current match
@@ -55,13 +55,13 @@ The commands and arguments are not case sensitive. With exception from the names
 
 **Not supported command:**  
 C: <not supported command>  
-S: ERR <reason>  
+S: ERR \<reason\>  
 ->no action.  
 
 **Login:**  
-C: login <player>  
+C: login \<player\>  
 S: OK  
-->Now logged in with <player>.  
+->Now logged in with \<player\>.  
 
 **Logout/disconnect:**  
 C: logout | exit | quit | disconnect | bye  
@@ -71,19 +71,19 @@ S: -
 **Retreiving the list of supported games:**  
 C: get gamelist  
 S: OK  
-S: SVR GAMELIST ["<gametype>", ...]  
+S: SVR GAMELIST ["\<gametype\>", ...]  
 ->List with games received.  
 
 **Retreiving the list of connected players:**  
 C: get playerlist  
 S: OK  
-S: SVR PLAYERLIST ["<player>", ...]  
+S: SVR PLAYERLIST ["\<player\>", ...]  
 ->List with all connected players received.  
 
 **Subscribing to a gametype:**  
-C: subscribe <gametype>  
+C: subscribe \<gametype\>  
 S: OK  
-->Subscribed for <gametype>.  
+->Subscribed for \<gametype\>.  
 
 **Unsubscribe:**  
 C: unsubscribe  
@@ -91,29 +91,36 @@ S: OK
 ->Unsubscribed from the previously subscribed game.  
 
 **Message:**  
-C: message | msg "name" <the message>  
+C: message | msg "name" \<the message\>  
 S: OK  
 -> Message has been send to the client
 
 **Match offered, message to both players:**  
-S: SVR GAME MATCH {GAMETYPE: "<gametype>", PLAYERTOMOVE: "<name player1>", OPPONENT: "<name opponent>"}  
+S: SVR GAME MATCH {GAMETYPE: "\<gametype\>", PLAYERTOMOVE: "\<name player1\>", OPPONENT: "\<name opponent\>"}  
 ->Now playing the match, subscription for a gametype has expired.  
 
 **Getting the turn in a match:**  
-S: SVR GAME YOURTURN {TURNMESSAGE: "<message for this turn>"}  
+S: SVR GAME YOURTURN {TURNMESSAGE: "\<message for this turn\>"}  
 ->Now the possibility to do a turn.  
 
 **Making a move after you get the possibility to do a turn:**  
-C: move <move>  
-S: OK  
-->The move is accepted by the server, result for the game will follow.  
+C: move \<move\> 
+S: OK
+->The move is accepted by the server, result for the game will follow.
+
+The \<move\> is an integer representation of a row and column. The \<move\> can be computed to a row and column with the following pseudocode:
+
+```
+int row = <move> / maxRows
+int column <move> % maxColumn
+```
 
 **Result from move received, message to both players:**  
-S: SVR GAME MOVE {PLAYER: "<player>", DETAILS: "<reaction on move>", MOVE: "<move>"}  
+S: SVR GAME MOVE {PLAYER: "\<player\>", DETAILS: "\<reaction on move\>", MOVE: "\<move\>"}  
 ->A move has been done, this message indicates who did the turn, what the turn is and wat the reaction from the game is.  
 
 **Result from receiving a match, message to both players:**  
-S: SVR GAME <player result> {PLAYERONESCORE: "<score player1>", PLAYERTWOSCORE: "<score player2>", COMMENT: "<comment on the result>"}  
+S: SVR GAME \<player result\> {PLAYERONESCORE: "\<score player1\>", PLAYERTWOSCORE: "\<score player2\>", COMMENT: "\<comment on the result\>"}  
 ->The match has ended, <player result> contains the value 'WIN', 'LOSS' or 'DRAW'.  
 
 **Forfeit a match:**   
@@ -122,34 +129,34 @@ S: OK
 ->The player has given up, the server will send the result of the match to both players.  
 
 **Result of a match that is forfeited by one of the players, message to both players:**  
-S: SVR GAME <player result> {PLAYERONESCORE: "<score player1>", PLAYERTWOSCORE: "<score player2>", COMMENT: "Player forfeited match"}  
+S: SVR GAME <player result> {PLAYERONESCORE: "\<score player1\>", PLAYERTWOSCORE: "\<score player2\>", COMMENT: "Player forfeited match"}  
 ->The match ended, <player> forfeited.   
 
 **Result of a match, player disconnected:**  
-S: SVR GAME <speler result> {PLAYERONESCORE: "<score player1>", PLAYERTWOSCORE: "<score player2>", COMMENT: "Client disconnected"}  
-->The match has ended, <player> disconnected.  
+S: SVR GAME \<speler result\> {PLAYERONESCORE: "\<score player1\>", PLAYERTWOSCORE: "\<score player2\>", COMMENT: "Client disconnected"}  
+->The match has ended, \<player\> disconnected.  
 
 **Challenging player for a game with default's server turntime:**
-C: challenge "<player>" "<gametype>"  
+C: challenge "\<player\>" "\<gametype\>"  
 S: OK  
 ->The player is now challenged for a game. Previous challenges will be cancelled.  
 
 **Challenging a player for a game with custom turntime:**
-C: challenge "<player>" "<gametype>" n  
+C: challenge "\<player\>" "\<gametype\>" n  
 S: OK  
--> Whereas 'n' can be written as an Integer, without quotationmarks.
+-> Whereas 'n' can be written as an integer, without quotationmarks.
 ->The player is now challanged for a game. Previous challanges will be cancelled.
 
 **Receiving a challange:**  
-S: SVR GAME CHALLENGE {CHALLENGER: <player>, GAMETYPE: <gametype>, CHALLENGENUMBER: <challangenumber>, TURNTIME: <turntime>}  
+S: SVR GAME CHALLENGE {CHALLENGER: \<player\>, GAMETYPE: \<gametype\>, CHALLENGENUMBER: \<challengenumber\>, TURNTIME: \<turntime\>}  
 ->Now the possibility to accept the challenge.
 
 **Result of a challenge that has expired:**  
-S: SVR GAME CHALLENGE CANCELLED {CHALLENGENUMBER: "<challenge number>"}  
+S: SVR GAME CHALLENGE CANCELLED {CHALLENGENUMBER: "\<challenge number\>"}  
 ->Challenge has expired. Possible causes: player started another challenge, player started a match or the player disconnected from the game.  
 
 **Accepting a challenge:**  
-C: challenge accept <challenge number>  
+C: challenge accept \<challenge number\>  
 S: OK  
 ->The challenge has been accepted. The match will be started, message will follow.  
 
@@ -159,10 +166,10 @@ S: OK
 ->The client asked for information, the server will answer with the information.  
 
 **Ask help for a specific command:**  
-C: help <command>  
+C: help \<command\>  
 S: OK  
-->The client asked for information for the <command> command, the server will answer with the information.  
+->The client asked for information for the \<command\> command, the server will answer with the information.  
 
 **Help information received:**  
-S: SVR HELP <help information>  
+S: SVR HELP \<help information\>  
 ->Help information is received, can contain multiple consecutive responses.  
