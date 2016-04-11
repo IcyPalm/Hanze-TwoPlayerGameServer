@@ -188,16 +188,15 @@ public class GameServer implements Runnable {
 		
 		SocketChannel client = (SocketChannel) key.channel();
 		try {
-			if(client != null) {
+			if (client != null) {
 				clientInputHandler.addData((Client) key.attachment(), null);
-				
+
 				Log.DEBUG.println("Closing client socket connection");
 				client.close();
 			}
-		} catch (IOException e) {
-			;
-		} catch (Exception e) {
-			;
+		}
+		catch (Exception e) {
+			System.out.println(e);
 		}
 		
 		key.cancel();
