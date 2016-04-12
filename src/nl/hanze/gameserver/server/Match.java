@@ -65,7 +65,7 @@ public class Match implements ActionListener {
 	public void start() {
 		gameModule.start();
 
-		HashMap<String, String> messageEntries = new HashMap<String, String>();
+		HashMap<String, String> messageEntries = new HashMap<>();
 		messageEntries.put("GAMETYPE", gameType);
 		messageEntries.put("PLAYERTOMOVE", playerOne.getPlayerName());
 
@@ -122,10 +122,8 @@ public class Match implements ActionListener {
 
 			if (!isFinished()) {
 				nextTurn();
-				return;
 			} else {
 				finished();
-				return;
 			}
 		}
 	}
@@ -176,8 +174,8 @@ public class Match implements ActionListener {
 	private void announceGameResult(int playerOneResult, int playerTwoResult, int playerOneScore, int playerTwoScore, String matchResultComment) {
 		timer.stop();
 
-		playerResults = new KeyValuePair<Integer, Integer>(playerOneResult, playerTwoResult);
-		playerScores = new KeyValuePair<Integer, Integer>(playerOneResult, playerTwoResult);
+		playerResults = new KeyValuePair<>(playerOneResult, playerTwoResult);
+		playerScores = new KeyValuePair<>(playerOneResult, playerTwoResult);
 		this.matchResultComment = matchResultComment;
 
 		String extra = StringUtils.toStringAsMap("COMMENT", matchResultComment, "PLAYERONESCORE", playerOneScore, "PLAYERTWOSCORE", playerTwoScore);

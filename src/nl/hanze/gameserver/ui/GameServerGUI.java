@@ -42,7 +42,7 @@ public class GameServerGUI implements ActionListener {
 		clientPanel = new PlayerPanel(gameServer.getClientManager());
 		panel.add(clientPanel);
 		
-		matchPanel = new MatchPanel(gameServer.getClientManager());
+		matchPanel = new MatchPanel();
 		panel.add(matchPanel);
 		
 		tournamentButton = new JButton("Show tournament window");

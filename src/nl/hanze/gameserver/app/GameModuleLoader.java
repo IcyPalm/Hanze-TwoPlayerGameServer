@@ -8,6 +8,7 @@ import java.lang.reflect.Modifier;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.jar.JarEntry;
@@ -22,10 +23,10 @@ public class GameModuleLoader {
 	private ArrayList<String> gameTypeList;
 	
 	public GameModuleLoader(File modulePath) {
-		gameModuleMap = new HashMap<String, Class<? extends AbstractGameModule>>();
+		gameModuleMap = new HashMap<>();
 		loadJarFiles(modulePath);
 		
-		gameTypeList = new ArrayList<String>(gameModuleMap.keySet());
+		gameTypeList = new ArrayList<>(gameModuleMap.keySet());
 	}
 	
 	public ArrayList<String> getGameTypeList() {
@@ -44,20 +45,10 @@ public class GameModuleLoader {
 		try {
 			Constructor<? extends AbstractGameModule> constructor = gameModuleClass.getConstructor(String.class, String.class);
 			gameModule = constructor.newInstance(playerOne, playerTwo);
-		} catch (SecurityException e) {
+		} catch (SecurityException | InvocationTargetException | IllegalAccessException | InstantiationException | IllegalArgumentException | NoSuchMethodException e) {
 			Log.ERROR.printf("Error loading game module '%s': %s", gameTypeName, e);
-		} catch (NoSuchMethodException e) {
-			Log.ERROR.printf("Error loading game module '%s': %s", gameTypeName, e);;
-		} catch (IllegalArgumentException e) {
-			Log.ERROR.printf("Error loading game module '%s': %s", gameTypeName, e);;
-		} catch (InstantiationException e) {
-			Log.ERROR.printf("Error loading game module '%s': %s", gameTypeName, e);;
-		} catch (IllegalAccessException e) {
-			Log.ERROR.printf("Error loading game module '%s': %s", gameTypeName, e);;
-		} catch (InvocationTargetException e) {
-			Log.ERROR.printf("Error loading game module '%s': %s", gameTypeName, e);;
 		}
-		
+
 		return gameModule;
 	}
 	
@@ -76,20 +67,12 @@ public class GameModuleLoader {
 		for(Class<? extends AbstractGameModule> gameModuleClass: moduleClassList) {
 			try {
 				String gameType = (String) gameModuleClass.getField("GAME_TYPE").get(null);
-				
 				if(gameType == null || (gameType.trim().equals(""))) {
 					continue;
 				}
-				
 				gameModuleMap.put(gameType, gameModuleClass);
-			} catch (SecurityException e) {
-				;
-			} catch (IllegalArgumentException e) {
-				;
-			} catch (IllegalAccessException e) {
-				;
-			} catch (NoSuchFieldException e) {
-				;
+			} catch (SecurityException | NoSuchFieldException | IllegalAccessException | IllegalArgumentException e) {
+				System.out.println("GameModuleLoader: 76 " + Arrays.toString(e.getStackTrace()));
 			}
 		}
 	}
@@ -110,7 +93,7 @@ public class GameModuleLoader {
 		JarFile jarFile = new JarFile(file);
 		
 		// Store found game module classes
-		ArrayList<Class<? extends AbstractGameModule>> classList = new ArrayList<Class<? extends AbstractGameModule>>();
+		ArrayList<Class<? extends AbstractGameModule>> classList = new ArrayList<>();
 		
 		// Find classes, iterate through Jar file looking for classes who's superclass is castable to AbstractGameModule and is not abstract.
 		for(Enumeration<JarEntry> entries = jarFile.entries(); entries.hasMoreElements(); ) {
@@ -145,10 +128,10 @@ public class GameModuleLoader {
 					// Add class to game module class list
 					classList.add(gameModuleClass);
 				} catch (ClassCastException e) {
-					;
+					System.out.println("GameModuleLoader: 131 " + Arrays.toString(e.getStackTrace()));
 				}
 			} catch (ClassNotFoundException e) {
-				;
+				System.out.println("GameModuleLoader: 134 " + Arrays.toString(e.getStackTrace()));
 			}
 		}
 		
@@ -158,7 +141,7 @@ public class GameModuleLoader {
 	}
 	
 	private ArrayList<File> getJarFiles(File modulePath) {
-		ArrayList<File> jarList = new ArrayList<File>();
+		ArrayList<File> jarList = new ArrayList<>();
 		
 		for(File file: modulePath.listFiles()) {
 			String filename = file.getAbsolutePath();
