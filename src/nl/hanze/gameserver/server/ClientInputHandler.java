@@ -36,8 +36,8 @@ public class ClientInputHandler implements Runnable {
 	private boolean running;
 	
 	public ClientInputHandler(CommandHandlerResolver commandHandlerResolver) {
-		readyQueue = new LinkedBlockingQueue<KeyValuePair<Client, byte[]>>();
-		clientInputBufferMap = new HashMap<Client, ByteBuffer>();
+		readyQueue = new LinkedBlockingQueue<>();
+		clientInputBufferMap = new HashMap<>();
 		
 		this.commandHandlerResolver = commandHandlerResolver;
 		
@@ -97,13 +97,13 @@ public class ClientInputHandler implements Runnable {
 				}
 				
 			} catch (InterruptedException e) {
-				;
+				e.printStackTrace();
 			}
 		}
 	}
 	
 	private ArrayList<Command> readCommands(ByteBuffer buffer) {
-		ArrayList<Command> commandList = new ArrayList<Command>();
+		ArrayList<Command> commandList = new ArrayList<>();
 		
 		String line;
 		while((line = ByteUtils.readLine(buffer)) != null) {
@@ -130,7 +130,7 @@ public class ClientInputHandler implements Runnable {
 	}
 	
 	public void addData(Client client, byte[] data) {
-		readyQueue.add(new KeyValuePair<Client, byte[]>(client, data));
+		readyQueue.add(new KeyValuePair<>(client, data));
 	}
 	
 	public CommandHandlerResolver getCommandHandlerResolver() {

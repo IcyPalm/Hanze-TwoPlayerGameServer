@@ -74,11 +74,9 @@ public class GameServer implements Runnable {
 		while(running) {
 			try {
 				selector.select();
-
 				synchronized(opsChangeLock) {}
 			} catch (IOException e) {
 				e.printStackTrace();
-
 				running = false;
 				continue;
 			}
@@ -103,17 +101,14 @@ public class GameServer implements Runnable {
 
 				try {
 					if(key.isAcceptable()) {
-						handleAccept(key);
+						handleAccept();
 					} else {
-
 						if(key.isReadable()) {
 							handleRead(key);
 						}
-
 						if(!key.isValid()) {
 							continue;
 						}
-
 						if(key.isWritable()) {
 							handleWrite(key);
 						}
@@ -129,7 +124,7 @@ public class GameServer implements Runnable {
 		}
 	}
 
-	private void handleAccept(SelectionKey key) throws IOException {
+	private void handleAccept() throws IOException {
 		SocketChannel channel = serverSocketChannel.accept();
 		channel.configureBlocking(false);
 
@@ -194,7 +189,6 @@ public class GameServer implements Runnable {
 				Log.DEBUG.println("Closing client socket connection");
 				client.close();
 			}
-
 			key.cancel();
 			key.attach(null);
 		} catch (IOException e) {
@@ -213,11 +207,6 @@ public class GameServer implements Runnable {
 
 		synchronized(opsChangeLock) {
 			selector.wakeup();
-			/*try {
-				client.close();
-			} catch (IOException e) {
-				;
-			}*/
 			disconnect(key);
 		}
 	}
