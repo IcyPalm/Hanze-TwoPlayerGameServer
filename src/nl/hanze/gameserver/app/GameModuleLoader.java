@@ -110,23 +110,21 @@ public class GameModuleLoader {
 				// Load the class from the Jar file
 				Class<?> clazz = Class.forName(className, true, jarClassLoader);
 
-				try {
-					// Try to cast the class to an AbstractGameModule
-					Class<? extends AbstractGameModule> gameModuleClass = clazz.asSubclass(AbstractGameModule.class);
+				if(clazz.getSuperclass().equals(AbstractGameModule.class)){
+						// Try to cast the class to an AbstractGameModule
+						Class<? extends AbstractGameModule> gameModuleClass = clazz.asSubclass(AbstractGameModule.class);
 
-					// If class is abstract: skip || If class is abstract: skip
-					if(((gameModuleClass.getModifiers() & Modifier.ABSTRACT) == Modifier.ABSTRACT)
-							|| ((gameModuleClass.getModifiers() & Modifier.PUBLIC) != Modifier.PUBLIC)) {
-						continue;
-					}
+						// If class is abstract: skip || If class is abstract: skip
+						if(((gameModuleClass.getModifiers() & Modifier.ABSTRACT) == Modifier.ABSTRACT)
+								|| ((gameModuleClass.getModifiers() & Modifier.PUBLIC) != Modifier.PUBLIC)) {
+							continue;
+						}
 
-					// Add class to game module class list
-					classList.add(gameModuleClass);
-				} catch (ClassCastException e) {
-					//Fixme: Well, Do something
-					continue;
+						// Add class to game module class list
+						classList.add(gameModuleClass);
 				}
-			} catch (ClassNotFoundException e) {
+
+			} catch (ClassNotFoundException| ClassCastException e) {
 				e.printStackTrace();
 			}
 		}
