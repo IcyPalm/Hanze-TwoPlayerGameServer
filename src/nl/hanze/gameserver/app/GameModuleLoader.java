@@ -113,20 +113,18 @@ public class GameModuleLoader {
 				
 				try {
 					// Try to cast the class to an AbstractGameModule
-					Class<? extends AbstractGameModule> gameModuleClass = clazz.asSubclass(AbstractGameModule.class);
-					
-					// If class is abstract: skip
-					if((gameModuleClass.getModifiers() & Modifier.ABSTRACT) == Modifier.ABSTRACT) {
-						continue;
+					if(AbstractGameModule.class.isAssignableFrom(clazz.getClass())){
+						Class<? extends AbstractGameModule> gameModuleClass = clazz.asSubclass(AbstractGameModule.class);
+						// If class is abstract: skip || If class not is public: skip
+						if(((gameModuleClass.getModifiers() & Modifier.ABSTRACT) == Modifier.ABSTRACT)
+								|| ((gameModuleClass.getModifiers() & Modifier.PUBLIC) != Modifier.PUBLIC)) {
+							continue;
+						}
+
+						// Add class to game module class list
+						classList.add(gameModuleClass);
 					}
-					
-					// If class not is public: skip
-					if((gameModuleClass.getModifiers() & Modifier.PUBLIC) != Modifier.PUBLIC) {
-						continue;
-					}
-					
-					// Add class to game module class list
-					classList.add(gameModuleClass);
+
 				} catch (ClassCastException e) {
 					e.printStackTrace();
 				}
@@ -142,14 +140,18 @@ public class GameModuleLoader {
 	
 	private ArrayList<File> getJarFiles(File modulePath) {
 		ArrayList<File> jarList = new ArrayList<>();
-		
-		for(File file: modulePath.listFiles()) {
-			String filename = file.getAbsolutePath();
-			if(filename.substring(filename.length() - 4).equalsIgnoreCase(".jar")) {
-				jarList.add(file);
+
+		try {
+			for (File file : modulePath.listFiles()) {
+				String filename = file.getAbsolutePath();
+				if (filename.substring(filename.length() - 4).equalsIgnoreCase(".jar")) {
+					jarList.add(file);
+				}
 			}
 		}
-		
+		catch(NullPointerException e){
+			e.printStackTrace();
+		}
 		return jarList;
 	}
 
