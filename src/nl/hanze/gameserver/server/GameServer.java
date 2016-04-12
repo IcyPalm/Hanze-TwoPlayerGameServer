@@ -101,7 +101,7 @@ public class GameServer implements Runnable {
 
 				try {
 					if(key.isAcceptable()) {
-						handleAccept(key);
+						handleAccept();
 					} else {
 						if(key.isReadable()) {
 							handleRead(key);
@@ -124,7 +124,7 @@ public class GameServer implements Runnable {
 		}
 	}
 
-	private void handleAccept(SelectionKey key) throws IOException {
+	private void handleAccept() throws IOException {
 		SocketChannel channel = serverSocketChannel.accept();
 		channel.configureBlocking(false);
 
@@ -207,11 +207,6 @@ public class GameServer implements Runnable {
 
 		synchronized(opsChangeLock) {
 			selector.wakeup();
-			/*try {
-				client.close();
-			} catch (IOException e) {
-				;
-			}*/
 			disconnect(key);
 		}
 	}
