@@ -128,10 +128,10 @@ public class GameModuleLoader {
 					// Add class to game module class list
 					classList.add(gameModuleClass);
 				} catch (ClassCastException e) {
-					System.out.println("GameModuleLoader: 131 " + Arrays.toString(e.getStackTrace()));
+					e.printStackTrace();
 				}
 			} catch (ClassNotFoundException e) {
-				System.out.println("GameModuleLoader: 134 " + Arrays.toString(e.getStackTrace()));
+				e.printStackTrace();
 			}
 		}
 		
