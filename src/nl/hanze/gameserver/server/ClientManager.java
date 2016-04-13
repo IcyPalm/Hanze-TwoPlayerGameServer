@@ -4,6 +4,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.stream.Collectors;
 
 import nl.hanze.gameserver.app.Application;
 import nl.hanze.gameserver.server.message.GameResponse;
@@ -26,8 +27,8 @@ public class ClientManager {
 	private int turntime;
 
 	public ClientManager() {
-		clientList = new ArrayList<Client>();
-		listenerList = new ArrayList<ActionListener>();
+		clientList = new ArrayList<>();
+		listenerList = new ArrayList<>();
 		tournament = null;
 	}
 
@@ -36,13 +37,8 @@ public class ClientManager {
 	}
 
 	public ArrayList<Client> getPlayerList() {
-		ArrayList<Client> playerList = new ArrayList<Client>(clientList.size());
-		for(Client client : clientList) {
-			if(client.isLoggedIn()) {
-				playerList.add(client);
-			}
-		}
-
+		ArrayList<Client> playerList = new ArrayList<>(clientList.size());
+		playerList.addAll(clientList.stream().filter(client -> client.isLoggedIn()).collect(Collectors.toList()));
 		return playerList;
 	}
 
@@ -168,14 +164,9 @@ public class ClientManager {
 	}
 
 	private void cancelChallenge(Challenge challenge, boolean notify) {
-		if(challenge == null) {
-			//ja niks
-		}
-		else {
-
+		if(challenge != null) {
 			challenge.getPlayer().setChallenge(null);
 			challenge.getOpponent().removeChallenge(challenge);
-
 			if (notify) {
 				String challengeNumberString = StringUtils.toStringAsMap("CHALLENGENUMBER", challenge.getChallengeNumber());
 				String format = "CHALLENGE CANCELLED %s";
@@ -208,7 +199,7 @@ public class ClientManager {
 		synchronized(clientList) {
 			for(Client opponent: clientList) {
 				if(opponent != client && gameType.equals(opponent.getSubscribedGameType()) && (opponent.getCurrentMatch() == null || opponent.getCurrentMatch().isFinished())) {
-					players = new ArrayList<Client>();
+					players = new ArrayList<>();
 					players.add(client);
 					players.add(opponent);
 					Collections.shuffle(players);
@@ -264,7 +255,7 @@ public class ClientManager {
 	}
 
 	public ArrayList<Match> getMatchList() {
-		ArrayList<Match> matchList = new ArrayList<Match>();
+		ArrayList<Match> matchList = new ArrayList<>();
 
 		synchronized(clientList) {
 			for(Client c : clientList) {
@@ -303,7 +294,7 @@ public class ClientManager {
 			}
 		}
 
-		tournament = new Tournament(this, gameType, playerList, turntime);
+		tournament = new Tournament(gameType, playerList, turntime);
 
 		return tournament;
 	}

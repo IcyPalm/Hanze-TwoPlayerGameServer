@@ -14,7 +14,7 @@ public class MatchPanel extends JPanel {
 	
 	private MatchTable table;
 	
-	public MatchPanel(ClientManager clientManager) {
+	public MatchPanel() {
 		super(new FlowLayout());
 		setVisible(true);
 		

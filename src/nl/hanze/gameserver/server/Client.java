@@ -3,6 +3,7 @@ package nl.hanze.gameserver.server;
 import java.nio.ByteBuffer;
 import java.nio.channels.SocketChannel;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import nl.hanze.gameserver.app.Application;
 import nl.hanze.gameserver.server.message.Response;
@@ -34,7 +35,7 @@ public class Client {
 		subscribedGameType = null;
 		currentMatch = null;
 		challenge = null;
-		challenges = new ArrayList<Challenge>();
+		challenges = new ArrayList<>();
 		
 		hostAddress = channel.socket().getInetAddress().getHostAddress();
 		playerName = null;
@@ -131,7 +132,7 @@ public class Client {
 			try {
 				Application.getInstance().getGameServer().setWritable(channel);
 			} catch (Exception e) {
-				;
+				e.printStackTrace();
 			}
 		}
 	}
@@ -150,26 +151,22 @@ public class Client {
 	
 	@Override
 	public String toString() {
-		String repr = null;
-		
+		String repr;
 		if(loggedIn) {
 			repr = String.format("%s@%s", playerName, hostAddress);
 		} else {
 			repr = hostAddress;
 		}
-		
 		return repr;
 	}
 	
 	@Override
 	public boolean equals(Object obj) {
 		boolean result = obj == this;
-		
 		if(!result && obj != null) {
 			Client other = (Client) obj;
 			result = other.channel == channel;
 		}
-		
 		return result;
 	}
 	
