@@ -31,8 +31,15 @@ public class Application {
 	
 	private GameServer gameServer;
 	private GameServerGUI gameServerGui;
-	
+
+	private boolean useGui = true;
+
 	private Application() {
+		this(new String[] {});
+	}
+
+	private Application(String[] cliArgs) {
+		parseCliArgs(cliArgs);
 		initialize();
 		
 		closing = false;
@@ -50,14 +57,25 @@ public class Application {
 		
 		try {
 			gameServer = new GameServer();
-			gameServerGui = new GameServerGUI(gameServer);
+			if (useGui) {
+				gameServerGui = new GameServerGUI(gameServer);
+			}
 		} catch (IOException e) {
 			Log.ERROR.printf("Error while instantiating GameServer: %s", e);
 			
 			exit();
 		}
 	}
-	
+
+	private void parseCliArgs(String[] cliArgs) {
+		for (String cliArg : cliArgs) {
+			System.out.println(cliArg);
+			if (cliArg.equals("--headless")) {
+				useGui = false;
+			}
+		}
+	}
+
 	private void initialize() {
 		shortName = "StrategicGameServer";
 		name = "Strategic Game Server";
@@ -135,7 +153,7 @@ public class Application {
 	}
 	
 	public static void main(String[] args) {
-		getInstance();
+		instance = new Application(args);
 		Log.DEBUG.println("Application started");
 	}
 }
